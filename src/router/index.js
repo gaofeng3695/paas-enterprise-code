@@ -14,6 +14,14 @@ const router = new Router({
       component: resolve => require(['../views/view-login/ViewLogin.vue'], resolve)
     },
     {
+      path: '/view-regist',
+      component: resolve => require(['../views/view-regist/ViewRegist.vue'], resolve)
+    },
+    {
+      path: '/view-reset',
+      component: resolve => require(['../views/view-reset/ViewReset.vue'], resolve)
+    },
+    {
       path: '/view-home',
       component: resolve => require(['../views/view-home/ViewHome.vue'], resolve),
       children: [{
@@ -25,6 +33,30 @@ const router = new Router({
       }, {
         path: 'demo-table',
         component: resolve => require(['../views/view-home/demo-table/DemoTable.vue'], resolve)
+      }, {
+        path: 'info-login',
+        component: resolve => require(['../views/view-home/info-login/InfoLogin.vue'], resolve)
+      }, {
+        path: 'info-operate',
+        component: resolve => require(['../views/view-home/info-operate/InfoOperate.vue'], resolve)
+      }, {
+        path: 'info-statistic',
+        component: resolve => require(['../views/view-home/info-statistic/InfoStatistic.vue'], resolve)
+      }, {
+        path: 'user-info',
+        component: resolve => require(['../views/view-home/user-info/UserInfo.vue'], resolve)
+      }, {
+        path: 'user-password',
+        component: resolve => require(['../views/view-home/user-password/UserPassword.vue'], resolve)
+      }, {
+        path: 'user-login',
+        component: resolve => require(['../views/view-home/user-login/UserLogin.vue'], resolve)
+      }, {
+        path: 'user-enterprise',
+        component: resolve => require(['../views/view-home/user-enterprise/UserEnterprise.vue'], resolve)
+      }, {
+        path: 'user-app',
+        component: resolve => require(['../views/view-home/user-app/UserApp.vue'], resolve)
       }]
     },
     { // 错误路径重定向到登录页面

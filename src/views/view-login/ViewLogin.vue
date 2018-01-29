@@ -12,6 +12,10 @@
         <div class="login-btn">
           <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
         </div>
+        <div>
+          <a href="#/view-reset" style="float:right;">忘记密码？</a>
+          <a href="#/view-regist" style="float:right;">立即注册</a>
+        </div>
         <p class="tip">Tips : 用户名和密码。</p>
       </el-form>
     </div>
@@ -49,6 +53,7 @@
     methods: {
       submitForm (formName) {
         const that = this;
+
         that.$refs[formName].validate(valid => {
           if (valid) {
             this.$jasHttp
