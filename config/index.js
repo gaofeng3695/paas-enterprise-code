@@ -20,7 +20,7 @@ module.exports = {
         target: 'https://www.easy-mock.com/',
         changeOrigin: true,
         pathRewrite: {
-          '/mock': '/mock/5a619fd7eeb2b709db35b8c5/tianji'
+          '/mock': '/mock/5a6fc5d6b2410e30c3732e3b/etps'
         }
       },
       '/upload': {
