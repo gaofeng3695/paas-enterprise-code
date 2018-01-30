@@ -61,7 +61,7 @@ const router = new Router({
     },
     { // 错误路径重定向到登录页面
       path: '*',
-      redirect: '/view-login'
+      redirect: '/view-home'
     }
   ]
 });
@@ -75,10 +75,10 @@ router.beforeEach((to, from, next) => { // 路由守卫
     next('/view-login'); // 去登陆
     return;
   }
-  if (to.path.indexOf('view-login') !== -1 && isLogin) { // 登录并且已登录
-    next('/view-home'); // 去主页
-    return;
-  }
+  // if (to.path.indexOf('view-login') !== -1 && isLogin) { // 登录并且已登录
+  //   next('/view-home'); // 去主页
+  //   return;
+  // }
   next(); // 继续
 });
 

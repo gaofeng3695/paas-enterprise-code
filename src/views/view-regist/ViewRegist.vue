@@ -1,14 +1,16 @@
 <template>
-  <div>
-    注册
-  </div>
-
+  <JasHeaderLogin :type="1" />
 </template>
 
 <script>
-  export default {};
+  import JasHeaderLogin from '../../components/jas/JasHeaderLogin.vue';
+  export default {
+    components: {
+      JasHeaderLogin
+    }
+  };
 </script>
 
-<style lang="sass" scoped>
+<style lang="scss" scoped>
 
 </style>
