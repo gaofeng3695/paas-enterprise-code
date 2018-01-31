@@ -57,6 +57,7 @@
 
 <style lang="scss" scoped>
   .header {
+    overflow: hidden;
     height: 80px;
     background: #3699dc;
     .logo {
