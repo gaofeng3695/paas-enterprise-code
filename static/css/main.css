@@ -11,6 +11,7 @@ body,
   height: 100%;
   overflow: hidden;
   color: #333;
+  font-size: 14px;
 }
 
 body {
@@ -48,4 +49,8 @@ button {
 
 .pointer {
   cursor: pointer;
+}
+
+.maincolor {
+  color: #319ce4;
 }

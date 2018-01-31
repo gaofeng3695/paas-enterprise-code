@@ -5,6 +5,8 @@ import App from './App';
 import router from './router';
 import ElementUI from 'element-ui';
 
+import 'font-awesome/css/font-awesome.css';
+
 import './assets/scss/element-variables.scss';
 import jasStorage from './assets/js/jas-storage';
 import jasHttp from './assets/js/jas-http';

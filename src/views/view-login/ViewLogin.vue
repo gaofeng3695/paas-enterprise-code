@@ -1,24 +1,26 @@
 <template>
   <div class="login-wrap">
-    <div class="ms-title">后台管理系统</div>
     <div class="ms-login">
+      <div class="ms-title maincolor">云产品研发平台企业版</div>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px">
         <el-form-item prop="username">
-          <el-input v-model.number="ruleForm.username" placeholder="username"></el-input>
+          <el-input prefix-icon="fa fa-user" v-model.number="ruleForm.username" placeholder="username"></el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input type="password" placeholder="password" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')"></el-input>
+          <el-input prefix-icon="fa fa-lock" type="password" placeholder="password" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')"></el-input>
         </el-form-item>
         <div class="login-btn">
           <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
         </div>
-        <div>
-          <a href="#/view-reset" style="float:right;">忘记密码？</a>
-          <a href="#/view-regist" style="float:right;">立即注册</a>
+        <div class="tip maincolor clearfix">
+          <a href="#/view-reset" class="fl link">忘记密码</a>
+          <a href="#/view-regist" class="fr link">立即注册</a>
         </div>
-        <p class="tip">Tips : 用户名和密码。</p>
       </el-form>
     </div>
+    <p class="copyright">
+      版权所有：北京中盈安信技术服务股份有限公司 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;京ICP备12006059号-1
+    </p>
   </div>
 </template>
 
@@ -84,35 +86,32 @@
   };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .login-wrap {
     position: relative;
     width: 100%;
     height: 100%;
-    background: #f90 url(/static/images/loginbg.jpg) no-repeat;
+    background: #f90 url(/static/images/loginbg.png) no-repeat center center;
     background-size: cover;
   }
   .ms-title {
-    position: absolute;
-    top: 50%;
-    width: 100%;
-    margin-top: -230px;
     text-align: center;
-    font-size: 30px;
-    color: #fff;
+    font-size: 26px;
+    padding-bottom: 50px;
   }
   .ms-login {
     position: absolute;
     left: 50%;
     top: 50%;
     width: 300px;
-    height: 160px;
-    margin: -150px 0 0 -190px;
+    height: 270px;
+    margin: -220px 0 0 -175px;
     padding: 40px;
-    border-radius: 5px;
+    border-radius: 12px;
     background: #fff;
   }
   .login-btn {
+    padding-top: 20px;
     text-align: center;
   }
   .login-btn button {
@@ -120,8 +119,17 @@
     height: 36px;
   }
   .tip {
-    font-size: 12px;
-    line-height: 30px;
-    color: #999;
+    padding: 10px 0;
+    .link {
+      color: #319ce4;
+      font-size: 14px;
+    }
+  }
+  .copyright {
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    bottom: 16px;
+    margin: 0 auto;
   }
 </style>
