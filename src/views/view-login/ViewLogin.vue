@@ -33,13 +33,11 @@
         if (!value) {
           return callback(new Error('请输入用户名'));
         }
-        setTimeout(() => {
-          if (!Number.isInteger(value)) {
-            callback(new Error('请输入手机号码'));
-          } else {
-            callback();
-          }
-        }, 300);
+        if (value.length < 12) {
+          callback(new Error('请输入手机号码'));
+        } else {
+          callback();
+        }
       };
       return {
         ruleForm: {
@@ -59,7 +57,7 @@
         that.$refs[formName].validate(valid => {
           if (valid) {
             this.$jasHttp
-              .post('/cloudlink-analysis-tianjiio/login/loginByPassword', {
+              .post('/mock/cloudlink-analysis-tianjiio/login/loginByPassword', {
                 loginNum: '' + that.ruleForm.username,
                 password: md5(that.ruleForm.password + '')
               })
