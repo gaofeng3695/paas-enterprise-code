@@ -8,7 +8,9 @@
 ### 1. BaseSteps
 
 步骤条组件
+### 2. BaseValidSlider
 
+滑动验证组件
 
 
 ## Jas业务通用组件

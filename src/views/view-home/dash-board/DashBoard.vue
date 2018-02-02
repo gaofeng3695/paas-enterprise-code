@@ -22,11 +22,14 @@
       </el-rate>
     </div>
 
+    <BaseValidSlider :success="success" @callback="success = true" />
+    <button @click="success=!success">切换</button>
   </div>
 
 </template>
 
 <script>
+  import BaseValidSlider from '../../../components/base/BaseValidSlider';
   export default {
     data () {
       const generateData = _ => {
@@ -40,7 +43,9 @@
         }
         return data;
       };
+
       return {
+        success: false,
         color1: '#409EFF',
         color2: null,
         data: generateData(),
@@ -48,7 +53,14 @@
         value10: null,
         value2: null
       };
+    },
+    components: {
+      BaseValidSlider
+    },
+    methods: {
+
     }
+
   };
 </script>
 
