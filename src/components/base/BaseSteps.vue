@@ -1,3 +1,4 @@
+
 <template>
   <div class="jas-steps">
     <el-steps :active="active" process-status="finish" finish-status="success" simple style="margin-top: 20px">
@@ -9,9 +10,17 @@
 </template>
 
 <script>
+  /**
+   * @name 步骤条组件
+   * @author gf
+   * @description 步骤条组件
+   * @prop steps
+   * @prop active
+   */
+
   export default {
     props: {
-      steps: { // header类型，1是欢迎注册 2是忘记密码
+      steps: {
         type: Array,
         default: () => ['步骤 1', '步骤2']
       },
