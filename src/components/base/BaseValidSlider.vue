@@ -12,8 +12,12 @@
 
 <script>
   /**
-   * 验证成功后触发 callback 回调
-   * */
+   * @name 滑动验证组件
+   * @author gf
+   * @description 向右滑动验证通过
+   * @prop success 验证的状态
+   * @event callback 滑动到右侧后出发，一般在此处设置状态为成功
+   */
 
   export default {
     props: {
