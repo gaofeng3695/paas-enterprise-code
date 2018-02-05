@@ -63,8 +63,8 @@
               })
               .then(res => {
                 if (res.data.success === 1) {
-                  this.$jasStorage.set('token', res.data.rows.token);
-                  this.$jasStorage.set('userInfo', res.data.rows.user);
+                  this.$jasStorage.set('token', res.data.rows[0].token);
+                  this.$jasStorage.set('userInfo', res.data.rows[0].userName);
                   that.$router.push('/view-home');
                 } else {
                   that.$message.error(res.data.msg || '用户名或密码错误');

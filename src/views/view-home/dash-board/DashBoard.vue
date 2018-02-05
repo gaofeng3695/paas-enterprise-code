@@ -1,69 +1,72 @@
 <template>
   <div class="main">
-    这里是主页
+    <h2>组件演示</h2>
 
-    <div class="block">
-      <span class="demonstration">有默认值</span>
-      <el-color-picker v-model="color1"></el-color-picker>
+    <div>
+      <div class="line">滑动验证</div>
+      <BaseValidSlider :success="success" @callback="success = true" />
+      <el-button @click="success=!success">切换</el-button>
     </div>
-    <div class="block">
-      <span class="demonstration">无默认值</span>
-      <el-color-picker v-model="color2"></el-color-picker>
+    <div>
+      <div class="line">倒计时按钮</div>
+      <div style="margin-top: 15px;">
+        <el-input prefix-icon="el-icon-search" placeholder="请输入内容" v-model="input5" class="input-with-select">
+          <BaseButtonTimer slot="append" name="确定" :time="35" @callback="clickbutton" />
+        </el-input>
+        <BaseButtonTimer name="发送验证码" :time="5" @callback="clickbutton" />
+      </div>
     </div>
-    <el-transfer v-model="value1" :data="data"></el-transfer>
+    <div>
+      <div class="line">步骤条</div>
+      <BaseSteps :steps="['步骤一','步骤二','步骤三','步骤四']" :active="active" />
+      <el-button @click="active++">下一步</el-button>
+      <el-button @click="active=0">重置</el-button>
+    </div>
 
-    <div class="block">
-      <span class="demonstration">默认不区分颜色</span>
-      <el-rate v-model="value10"></el-rate>
-    </div>
-    <div class="block">
-      <span class="demonstration">区分颜色</span>
-      <el-rate v-model="value2" :colors="['#99A9BF', '#F7BA2A', '#FF9900']">
-      </el-rate>
-    </div>
+    <div class="line">注册成功</div>
+    <JasRegistSuccess :begin="isbegin" />
+    <el-button @click="isbegin = true">开始</el-button>
+    <el-button @click="isbegin = false">重置</el-button>
 
-    <BaseValidSlider :success="success" @callback="success = true" />
-    <button @click="success=!success">切换</button>
   </div>
 
 </template>
 
 <script>
   import BaseValidSlider from '../../../components/base/BaseValidSlider';
+  import BaseButtonTimer from '../../../components/base/BaseButtonTimer';
+  import BaseSteps from '../../../components/base/BaseSteps';
+  import JasRegistSuccess from '../../../components/jas/JasRegistSuccess';
   export default {
     data () {
-      const generateData = _ => {
-        const data = [];
-        for (let i = 1; i <= 15; i++) {
-          data.push({
-            key: i,
-            label: `备选项 ${i}`,
-            disabled: i % 4 === 0
-          });
-        }
-        return data;
-      };
-
       return {
         success: false,
-        color1: '#409EFF',
-        color2: null,
-        data: generateData(),
-        value1: [1, 4],
-        value10: null,
-        value2: null
+        active: 0,
+        isbegin: false
       };
     },
     components: {
-      BaseValidSlider
+      BaseValidSlider, BaseButtonTimer, BaseSteps, JasRegistSuccess
     },
     methods: {
-
+      clickbutton () {
+        this.$message('这是一条消息提示');
+      }
     }
 
   };
 </script>
 
 <style scoped>
-
+  .line {
+    border-radius: 4px 0 0 4px;
+    border-left: 4px solid #50bfff;
+    height: 40px;
+    line-height: 40px;
+    background: #ecf8ff;
+    padding: 4px 12px;
+    margin: 20px 0 10px;
+    font-size: 16px;
+    font-weight: 600;
+  }
 </style>
