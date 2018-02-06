@@ -40,6 +40,7 @@
   export default {
     data () {
       return {
+        input5: '',
         success: false,
         active: 0,
         isbegin: false

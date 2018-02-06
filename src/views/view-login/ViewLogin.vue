@@ -4,10 +4,10 @@
       <div class="ms-title maincolor">云产品研发平台企业版</div>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px">
         <el-form-item prop="username">
-          <el-input prefix-icon="fa fa-user" v-model.number="ruleForm.username" placeholder="username"></el-input>
+          <el-input prefix-icon="fa fa-user" v-model.number="ruleForm.username" placeholder="请输入手机号"></el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input prefix-icon="fa fa-lock" type="password" placeholder="password" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')"></el-input>
+          <el-input prefix-icon="fa fa-lock" type="password" placeholder="请输入密码" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')"></el-input>
         </el-form-item>
         <div class="login-btn">
           <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
@@ -25,8 +25,6 @@
 </template>
 
 <script>
-  import md5 from 'js-md5';
-
   export default {
     data: () => {
       let checkUser = (rule, value, callback) => {
@@ -41,8 +39,8 @@
       };
       return {
         ruleForm: {
-          username: 15811236011,
-          password: 123123
+          username: 18000000001,
+          password: '111111'
         },
         rules: {
           username: [{ validator: checkUser, trigger: 'blur' }],
@@ -57,14 +55,15 @@
         that.$refs[formName].validate(valid => {
           if (valid) {
             this.$jasHttp
-              .post('/mock/cloudlink-analysis-tianjiio/login/loginByPassword', {
+              .post('/cloudlink-core-framework/login/login', {
                 loginNum: '' + that.ruleForm.username,
-                password: md5(that.ruleForm.password + '')
+                password: that.ruleForm.password + '',
+                appId: '0c753fdd-5f54-4b24-bf50-491ea5eb1a84'
               })
               .then(res => {
                 if (res.data.success === 1) {
-                  this.$jasStorage.set('token', res.data.rows[0].token);
-                  this.$jasStorage.set('userInfo', res.data.rows[0].userName);
+                  this.$jasStorage.set('token', res.data.token);
+                  this.$jasStorage.set('userInfo', res.data.rows[0]);
                   that.$router.push('/view-home');
                 } else {
                   that.$message.error(res.data.msg || '用户名或密码错误');
