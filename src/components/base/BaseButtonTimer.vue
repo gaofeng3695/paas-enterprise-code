@@ -47,8 +47,12 @@
         this.timeself = this.time;
         clearInterval(this.timer);
         this.timer = setInterval(() => {
-          this.timeself--;
-          if (this.timeself === 0) {
+          // 只有当时间大于0秒的时候才倒计时
+          if (this.timeself > 0) {
+            this.timeself--;
+          }
+          // 当时间小于1秒的时候停止倒计时
+          if (this.timeself < 1) {
             clearInterval(this.timer);
           }
         }, 1000);
