@@ -7,7 +7,7 @@
         <JasPhoneValidate v-on:getPhone="getPhone" />
         
       </div>
-      <p class="copyright">版权所有 北京中盈安信技术服务股份有限公司 京ICP备12006059号-1</p>
+      <p class="copyright">版权所有：北京中盈安信技术服务股份有限公司 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;京ICP备12006059号-1</p>
     </div>
   </div>
 </template>
@@ -34,11 +34,8 @@
       tt () {
         console.log('11111111');
       },
-      getPhone (tt) {
-        console.log(tt);
-      },
-      onSubmit () {
-        console.log(this.verifyPhoneForm.phone);
+      getPhone (phoneInfo) {
+        console.log('得到的电话表单：', phoneInfo);
       }
     }
   };
@@ -46,9 +43,7 @@
 
 <style lang="scss" scoped>
 
-   .el-select {
-      width: 80px;
-    }
+   
   // 找回密码页面总样式
   .view-reset {
     height: 100%;
