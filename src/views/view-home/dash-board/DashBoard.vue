@@ -24,7 +24,7 @@
     </div>
 
     <div class="line">注册成功</div>
-    <JasRegistSuccess :begin="isbegin" />
+    <JasRegistSuccess :begin="isbegin" title="恭喜您，密码重置成功！" />
     <el-button @click="isbegin = true">开始</el-button>
     <el-button @click="isbegin = false">重置</el-button>
 
