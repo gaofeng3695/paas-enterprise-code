@@ -27,14 +27,22 @@
 <script>
   export default {
     data: () => {
-      let checkUser = (rule, value, callback) => {
+      // 手机号正确性检测
+      var checkedPhoneNumber = (rule, value, callback, that) => {
+        var numberReg = /^[1][3-8][0-9]{9}$/; // 手机号匹配规则： 1. 第一位为1。   2. 第二位为3~8中的一个。   3. 最后9位为0~9中的一个。
+        this.countdown = 0;                   // 重置发送验证码 按钮倒计时为0(禁止倒计时)
         if (!value) {
-          return callback(new Error('请输入用户名'));
-        }
-        if (value.length < 12) {
-          callback(new Error('请输入手机号码'));
+          return callback(new Error('手机号不能为空'));
+        } else if (value.toString().length !== 11) {
+          return callback(new Error('手机号长度不对(长度11位)'));
         } else {
-          callback();
+          // 手机号格式正确，设置 发送验证码按钮倒计时为60秒
+          if (numberReg.test(value)) {
+            this.countdown = 20;
+            callback();
+          } else {
+            return callback(new Error('手机号格式不对'));
+          }
         }
       };
       return {
@@ -43,8 +51,9 @@
           password: '111111'
         },
         rules: {
-          username: [{ validator: checkUser, trigger: 'blur' }],
-          password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+          username: [{ type: 'number', required: true, message: '请输入手机号' },
+          { validator: checkedPhoneNumber }],
+          password: [{ required: true, message: '请输入密码' }]
         }
       };
     },
