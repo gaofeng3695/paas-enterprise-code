@@ -28,6 +28,19 @@
     <el-button @click="isbegin = true">开始</el-button>
     <el-button @click="isbegin = false">重置</el-button>
 
+    <div class="line">企业切换组件</div>
+    <el-carousel :autoplay="false" type="card" trigger="click" indicator-position="none" height="100px" style="width:280px;">
+      <el-carousel-item v-for="item in 6" :key="item">
+        <h3>{{ item }}</h3>
+      </el-carousel-item>
+    </el-carousel>
+    <div class="line">图片上传</div>
+
+    <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+      <img v-if="imageUrl" :src="imageUrl" class="avatar">
+      <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+    </el-upload>
+
   </div>
 
 </template>
@@ -43,7 +56,8 @@
         input5: '',
         success: false,
         active: 0,
-        isbegin: false
+        isbegin: false,
+        imageUrl: ''
       };
     },
     components: {
@@ -52,9 +66,23 @@
     methods: {
       clickbutton () {
         this.$message('这是一条消息提示');
+      },
+      handleAvatarSuccess (res, file) {
+        this.imageUrl = URL.createObjectURL(file.raw);
+      },
+      beforeAvatarUpload (file) {
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+        if (!isJPG) {
+          this.$message.error('上传头像图片只能是 JPG 格式!');
+        }
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 2MB!');
+        }
+        return isJPG && isLt2M;
       }
     }
-
   };
 </script>
 
@@ -69,5 +97,43 @@
     margin: 20px 0 10px;
     font-size: 16px;
     font-weight: 600;
+  }
+  .el-carousel__item h3 {
+    color: #475669;
+    font-size: 14px;
+    opacity: 0.75;
+    margin: 0;
+  }
+
+  .el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
+  }
+
+  .el-carousel__item:nth-child(2n + 1) {
+    background-color: #d3dce6;
+  }
+
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409eff;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
   }
 </style>
