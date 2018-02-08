@@ -10,10 +10,12 @@ import 'font-awesome/css/font-awesome.css';
 import './assets/scss/element-variables.scss';
 import jasStorage from './assets/js/jas-storage';
 import jasHttp from './assets/js/jas-http';
+import * as jasDirectives from './assets/js/jas-directives';
 
 Vue.config.productionTip = false;
 
 Vue.use(ElementUI);
+Vue.use(jasDirectives);
 
 Vue.prototype.$jasHttp = jasHttp;
 Vue.prototype.$jasStorage = jasStorage;
