@@ -50,7 +50,6 @@
       BaseValidSlider, BaseButtonTimer
     },
     data () {
-      // var that = this;
       // 手动拖动滑块 校验
       var checkedManual = (rule, value, callback) => {
         if (!value) {
@@ -78,7 +77,7 @@
         } else {
           // 手机号格式正确，设置 发送验证码按钮倒计时为60秒
           if (numberReg.test(value)) {
-            this.countdown = 20;
+            this.countdown = 60;
             callback();
           } else {
             return callback(new Error('手机号格式不对'));
@@ -99,9 +98,9 @@
           phone: [{ type: 'number', required: true, message: '请输入手机号。' },
                 {validator: checkedPhoneNumber}
           ],
-          manualVerify: [{ validator: checkedManual, trigger: 'blur' }],
+          manualVerify: [{ validator: checkedManual, required: true, trigger: 'change' }],
           verifyCode: [{ type: 'number', required: true, message: '请输入验证码。' }],
-          accept: [{ validator: checkedAccept }]
+          accept: [{ validator: checkedAccept, required: true, trigger: 'change' }]
         },
         // 获取验证码按钮的倒计时 时间
         countdown: 0
@@ -116,10 +115,43 @@
         // 手机号匹配规则： 1. 第一位为1。   2. 第二位为3~8中的一个。   3. 最后9位为0~9中的一个。
         var numberReg = /^[1][3-8][0-9]{9}$/;
         if (numberReg.test(this.phoneForm.phone)) {
-          // 手机号校验通过，调用API 申请发送手机验证码。
-
-          // TODO ： 发送验证码API调用
-          this.$message('验证码已经发送，请注意接收短信！');
+          // 获取手机验证码API接口参数
+          var params = {
+            sendMode: '1',                        // 验证类型必填： 1手机 2邮箱，默认为手机， 目前只支持手机
+            sendNum: this.phoneForm.phone + '',   // 接收验证码账号，必选，字符串类型，手机号码或邮箱，目前只支持手机
+            signName: '巡线卫士',                  // 验证码签名即应用签名，必选，字符类型，如巡线卫士 2018-02-08:目前只有巡线卫士
+            useCategory: 'general'                // 使用场景，必选: 通用general 注册regist 登录 login
+          };
+          // 发送验证码API调用
+          this.$jasHttp.post('/cloudlink-core-framework/verfy/getVerifyCode', params)
+          .then(res => {
+            console.log('返回的信息：', res);
+            // 成功发送验证码信息：{"success":1,"code":"200","msg":"ok","rows":[{"verifyCode":"验证码"}]}
+            if (res.data.success === 1 && res.data.msg === 'ok') {
+              this.$notify({
+                message: '验证码已经发送，请注意接收短信！',
+                type: 'success'
+              });
+              // this.$message.success('验证码已经发送，请注意接收短信！');
+            } else if (res.data.success === -1) {
+              // 获取验证码失败：{success:-1，msg："对应错误信息",code:"对应错误编码"}
+              this.$notify({
+                message: '获取验证码出错，错误信息：' + res.data.msg,
+                type: 'error'
+              });
+            } else {
+              // 连开发人员都不知道的错误信息
+              this.$notify({
+                message: '获取验证码出现未知错误，错误信息：' + res.data.msg,
+                type: 'error'
+              });
+            }
+          }).catch(err => {
+            this.$notify({
+              message: '发送验证码出错，请找管理员解决,错误信息：' + err,
+              type: 'error'
+            });
+          });
         } else {
           // 手机号码格式不对，提示输入正确的手机号。
           this.$message('请输入正确的手机号码，然后在点击发送验证码！');
@@ -134,17 +166,38 @@
         const that = this;
         that.$refs[formName].validate(valid => {
           if (valid) {
+            var params = {
+              sendNum: that.phoneForm.phone + '',           // 接收验证码的号码，手机号或邮箱，必选，字符串类型
+              verifyCode: that.phoneForm.verifyCode + ''    // 验证码，必选，字符串类型】
+            };
             // TODO： 验证码正确性API 调用
-            // that.$jasHttp.post('/mock/phone/idCode', {code: that.phoneForm.verifyCode})
-            // .then(res => {
-            //   if (res.data.data.success) {
-            //     this.$emit('getPhone', this.phoneForm);
-            //   } else {
-            //     console.log('验证码错误');
-            //     that.$message.error(res.data.msg || '验证码错误请从新输入');
-            //   }
-            // });
-            this.$emit('getPhone', this.phoneForm);
+            that.$jasHttp.get('/cloudlink-core-framework/verfy/checkVerifyCode', params)
+            .then(res => {
+              // 校验 验证码成功： {"success":1,"code":"200","msg":"ok","rows":[{}]}
+              if (res.data.success === 1 && res.data.msg === 'ok') {
+                // that.$message.success('验证码没问题');
+                that.$emit('getPhone', that.phoneForm);
+              } else if (res.data.success === -1) {
+                // 校验 验证码失败：{success:-1，msg："对应错误信息",code:"对应错误编码"}
+                that.$notify({
+                  message: '验证码有误，错误信息：' + res.data.msg,
+                  type: 'error'
+                });
+                return false;
+              } else {
+                // 连开发人员都不知道的错误信息
+                that.$notify({
+                  message: '校验验证码出错，错误信息：' + res.data.msg,
+                  type: 'error'
+                });
+                return false;
+              }
+            }).catch(err => {
+              that.$notify({
+                message: '校验验证码出错，请找管理员解决,错误信息：' + err,
+                type: 'error'
+              });
+            });
           } else {
             console.log('error submit!!');
             return false;
