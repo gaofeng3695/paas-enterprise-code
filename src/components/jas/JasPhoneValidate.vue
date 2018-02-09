@@ -16,7 +16,7 @@
       </el-form-item>
       <!-- 获取手机验证码 -->
       <el-form-item label="验证码" prop="verifyCode">
-        <el-input v-model.number="phoneForm.verifyCode" placeholder="请输入手机验证码">
+        <el-input v-model="phoneForm.verifyCode" placeholder="请输入手机验证码">
           <!-- slot="append" 在输入框的后面 -->
           <!-- <el-button slot="append">获取验证码</el-button> -->
           <BaseButtonTimer slot="append" name="发送验证码" :time="countdown" @callback="sendPhoneCode" />
@@ -99,7 +99,7 @@
                 {validator: checkedPhoneNumber}
           ],
           manualVerify: [{ validator: checkedManual, required: true, trigger: 'change' }],
-          verifyCode: [{ type: 'number', required: true, message: '请输入验证码。' }],
+          verifyCode: [{ required: true, message: '请输入验证码。' }],
           accept: [{ validator: checkedAccept, required: true, trigger: 'change' }]
         },
         // 获取验证码按钮的倒计时 时间
@@ -154,7 +154,10 @@
           });
         } else {
           // 手机号码格式不对，提示输入正确的手机号。
-          this.$message('请输入正确的手机号码，然后在点击发送验证码！');
+          this.$notify({
+            message: '请输入正确的手机号码，然后在点击发送验证码！',
+            type: 'error'
+          });
         }
       },
       /**
