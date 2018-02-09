@@ -28,12 +28,8 @@
     <el-button @click="isbegin = true">开始</el-button>
     <el-button @click="isbegin = false">重置</el-button>
 
-    <div class="line">企业切换组件</div>
-    <el-carousel :autoplay="false" type="card" trigger="click" indicator-position="none" height="100px" style="width:280px;">
-      <el-carousel-item v-for="item in 6" :key="item">
-        <h3>{{ item }}</h3>
-      </el-carousel-item>
-    </el-carousel>
+    <div class="line">地址选择</div>
+    <JasSelectAddress v-model="aCity" />
     <div class="line">图片上传</div>
 
     <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
@@ -50,6 +46,8 @@
   import BaseButtonTimer from '../../../components/base/BaseButtonTimer';
   import BaseSteps from '../../../components/base/BaseSteps';
   import JasRegistSuccess from '../../../components/jas/JasRegistSuccess';
+  import JasSelectAddress from '../../../components/jas/JasSelectAddress';
+
   export default {
     data () {
       return {
@@ -57,11 +55,12 @@
         success: false,
         active: 0,
         isbegin: false,
-        imageUrl: ''
+        imageUrl: '',
+        aCity: ['eda7d877-3f18-4c41-bb9a-028e4f876550', '7eb35714-8565-425e-a134-785ae909284e', '2ca23cc1-afc6-4dfd-9026-cc42907a1c0a']
       };
     },
     components: {
-      BaseValidSlider, BaseButtonTimer, BaseSteps, JasRegistSuccess
+      BaseValidSlider, BaseButtonTimer, BaseSteps, JasRegistSuccess, JasSelectAddress
     },
     methods: {
       clickbutton () {
@@ -82,7 +81,9 @@
         }
         return isJPG && isLt2M;
       }
+
     }
+
   };
 </script>
 
