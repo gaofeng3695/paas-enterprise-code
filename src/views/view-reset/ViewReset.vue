@@ -3,7 +3,7 @@
     <JasHeaderLogin :type="2" />
     <div>
       <div class="content">
-        <!-- 密码找回进度条 -->
+        <!-- 密码找回步骤条 -->
         <BaseSteps :active="step" :steps="['安全验证','重置密码','完成']" />
         <!-- 第一步： 手机号验证 -->
         <JasPhoneValidate v-if="step === 0" v-on:getPhone="getPhone" />
@@ -11,9 +11,10 @@
         <div v-if="step === 1">
           <el-form :model="resetPdForm" :rules="rules" ref="resetPdForm" label-width="80px">
             <el-form-item label="新密码" prop="newPassword">
-              <el-input v-model="resetPdForm.newPassword" type="password" placeholder="请输入新密码">
+              <el-input v-model="resetPdForm.newPassword" type="password" placeholder="请输入新密码"
+              v-tip="{tip:'使用字母、数字和符号两种及以上的组合，6-20个字符'}">
               </el-input>
-              <p>使用字母、数字和符号两种及以上的组合，6-20个字符</p>
+              <!-- <p>使用字母、数字和符号两种及以上的组合，6-20个字符</p> -->
             </el-form-item>
             <el-form-item label="确认密码" prop="confirmPassword">
               <el-input v-model="resetPdForm.confirmPassword"  type="password" placeholder="请确认密码">
@@ -55,10 +56,11 @@
         } else if (value.toString().length < 6 || value.toString().length > 20) {
           return callback(new Error('密码的长度为6到12位'));
         } else {
+          // 校验密码规则 匹配
           if (regular.test(value)) {
             callback();
           } else {
-            return callback(new Error('密码给不对：使用字母、数字和符号两种及以上的组合'));
+            return callback(new Error('密码组合不对：使用字母、数字和符号两种及以上的组合'));
           }
         }
       };
@@ -80,8 +82,8 @@
       return {
         // 重置密码表单数据
         resetPdForm: {
-          newPassword: '',
-          confirmPassword: ''
+          newPassword: '',        // 新密码
+          confirmPassword: ''     // 确认新密码
         },
         // 密码重置表单验证规则
         rules: {
@@ -96,18 +98,20 @@
             {validator: checkedConfirmPd}
           ]
         },
-        step: 0                // 步骤条
+        resetPdSwitcher: true,  // 密码重置API 防止重复发送开关： 一次请求结果返回才可以再次请求， true：可以发送， false：禁止发送
+        phoneInfo: null,        // 获得的 手机号与验证码信息
+        step: 0                 // 步骤条
       };
     },
     methods: {
       /**
        * 手机验证组件回调函数 处理事件
-       * @param {Object}phoneInfo 电话表单数据
+       * @param {Object}data 电话表单数据
        * @returns {void}
       */
-      getPhone (phoneInfo) {
+      getPhone (data) {
         this.step = 1;
-        console.log('得到的电话表单：', phoneInfo);
+        this.phoneInfo = data;
       },
       /**
        * 密码重置提交按钮 处理事件
@@ -119,21 +123,68 @@
         this.$refs[formName].validate(valid => {
           if (valid) {
             if (that.resetPdForm.newPassword === that.resetPdForm.confirmPassword) {
-              // 密码确认成功，进入第三步，提示密码修改成功
-              that.step = 2;
+              var params = {
+                mobileNum: that.phoneInfo.phone + '',         // 手机号 字符串类型
+                verifyCode: that.phoneInfo.verifyCode + '',   // 验证码 字符串类型
+                password: that.resetPdForm.newPassword + ''   // 新密码 字符串类型
+              };
+              this.resetPassword(params);                     // 调用接口重置密码
             } else {
-              that.$notify({
+              this.$notify({
                 message: '两次密码不一致，请重新输入！！！！！',
                 type: 'error'
               });
             }
           } else {
-            that.$notify({
-              message: '有必填项没有填！！！',
-              type: 'error'
-            });
             return false;
           }
+        });
+      },
+      /**
+       * 密码重置API调用
+       * @param {Object}params API接口参数
+       * @returns {void}
+      */
+      resetPassword (params) {
+        // 请求已经发送，还没有返回结果，则禁止再次发送请求。
+        if (!this.resetPdSwitcher) {
+          this.$notify({
+            duration: 9000,
+            message: '密码重置请求已经发送，请耐心等待。',
+            type: 'info'
+          });
+          return;
+        }
+        this.resetPdSwitcher = false;   // 禁止请求重置密码API
+        this.$jasHttp.post('/cloudlink-core-framework/login/resetPassword', params)
+        .then(res => {
+          // 密码重置成功：{"success":1,"code":"200","msg":"ok","rows":[{"booleanResult":true}]}
+          if (res.data.success === 1 && res.data.msg === 'ok') {
+            // 密码确认成功，进入第三步，提示密码修改成功
+            this.step = 2;
+          } else if (res.data.success === -1) {
+            // 密码重置失败：{success:-1，msg："对应错误信息",code:"对应错误编码"}
+            this.$notify({
+              duration: 9000,
+              message: '密码重置出错，错误信息：' + res.data.msg,
+              type: 'error'
+            });
+          } else {
+            // 连开发人员都不知道的错误信息
+            this.$notify({
+              duration: 9000,
+              message: '密码重置出现未知错误，错误信息：' + res.data.msg,
+              type: 'error'
+            });
+          }
+          this.resetPdSwitcher = true;    // 可以再次请求重置密码API
+        }).catch(err => {
+          this.$notify({
+            duration: 9000,
+            message: '密码重置出错，请找管理员解决，错误信息：' + err,
+            type: 'error'
+          });
+          this.resetPdSwitcher = true;    // 可以再次请求重置密码API
         });
       }
     }
