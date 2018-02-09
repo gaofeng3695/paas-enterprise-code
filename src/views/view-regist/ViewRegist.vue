@@ -50,9 +50,9 @@
             <el-form-item label="企业电话" prop="enterpriseNum">
               <el-input v-model="ruleForm2.enterpriseNum" v-tip="{tip:'请输入正确的电话号码'}" placeholder="请输入企业电话"></el-input>
             </el-form-item>
-            <!-- <el-form-item label="企业所在地" prop="address">
-              <el-cascader v-model="ruleForm2.address" :options="options" change-on-select placeholder="请选择"></el-cascader>
-            </el-form-item> -->
+            <el-form-item label="企业所在地" prop="address">
+              <JasSelectAddress v-model="ruleForm2.address" placeholder="请选择"/>
+            </el-form-item>
             <el-form-item label="详细地址" prop="detailAddress">
               <el-input v-model="ruleForm2.detailAddress" v-tip="{tip:'支持中文、字母、数字、“_”、“-”，2-200个字符'}" placeholder="请输入详细地址"></el-input>
             </el-form-item>
@@ -69,9 +69,9 @@
           <JasRegistSuccess :begin="isbegin" />
         </div>
 
-        <!-- <div>
+        <div>
           <el-dialog title="申请加入企业" :visible.sync="dialogVisible">
-            <el-form :model="form" label-width="90px">
+            <el-form :model="ruleForm2" label-width="90px">
               <el-form-item label="企业名称" prop="enterpriseName">
                 <el-input v-model="ruleForm2.enterpriseName" :disabled="true"></el-input>
               </el-form-item>
@@ -81,10 +81,10 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
               <el-button @click="dialogVisible = false">取 消</el-button>
-              <el-button type="primary" @click="dialogVisible = false,nextStep3('ruleForm2')">确 定</el-button>
+              <el-button type="primary" @click="dialogVisible = false,nextStep4('ruleForm2')">确 定</el-button>
             </div>
           </el-dialog>
-        </div> -->
+        </div>
 
       </div>
       <p class="copyright">版权所有：北京中盈安信技术服务股份有限公司 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;京ICP备12006059号-1</p>
@@ -98,10 +98,11 @@ import JasHeaderLogin from '../../components/jas/JasHeaderLogin.vue';           
 import JasRegistSuccess from '../../components/jas/JasRegistSuccess.vue';              // 注册成功倒计时组件
 import BaseSteps from '../../components/base/BaseSteps.vue';                           // 步骤条组件
 import JasPhoneValidate from '../../components/jas/JasPhoneValidate.vue';              // 电话号码验证
+import JasSelectAddress from '../../components/jas/JasSelectAddress';
 // import md5 from 'js-md5';
 export default {
   components: {
-    JasHeaderLogin, BaseSteps, JasRegistSuccess, JasPhoneValidate
+    JasHeaderLogin, BaseSteps, JasRegistSuccess, JasPhoneValidate, JasSelectAddress
   },
   data () {
     // 验证用户名是否满足要求
@@ -149,7 +150,7 @@ export default {
     //   }
     // };
     return {
-      index: 0,             // 步骤条下标
+      index: 1,             // 步骤条下标
       isbegin: false,       // 注册成功页面倒计时，默认为false
       dialogVisible: false, // 申请加入企业页面，默认不显示
       ruleForm: {
@@ -162,9 +163,9 @@ export default {
         enterpriseName: '',       // 企业名称
         enterpriseScale: '',      // 企业规模
         enterpriseNum: '',        // 企业电话
-        // address: '',              // 企业地址  省、市、区
-        detailAddress: ''        // 详细地址
-        // desc: ''                  // 申请理由
+        address: [],              // 企业地址  省、市、区
+        detailAddress: '',        // 详细地址
+        desc: ''                  // 申请理由
       },
       rules: {
         userName: [{ required: true, validator: checkUserName, trigger: 'blur' }],
@@ -221,10 +222,12 @@ export default {
         registNum: '' + phoneInfo.phone
       })
         .then(res => {
+          // 校验 手机号未注册 且验证码无误 跳转到下一步
           if (res.data.success === 1 && res.data.msg === 'ok') {
             this.$jasStorage.set('userInfo', res.data.rows[0]);
             that.index++;
           } else if (res.data.success === 1 && res.data.msg !== 'ok') {
+            // 校验 验证码无误且手机号正确，但此手机号已经被注册，提示错误信息
             that.$notify({
               message: res.data.msg,
               type: 'error'
@@ -261,21 +264,6 @@ export default {
       });
     },
     // 第三步：设置企业信息，信息无误跳转到下一步
-    // nextStep3 (formName) {
-    //   const that = this;
-    //   console.log('this.ruleForm:   ', this.ruleForm);
-    //   console.log('this.ruleForm2:   ', this.ruleForm2);
-    //   that.$refs[formName].validate((valid) => {
-    //     if (valid) {
-    //       this.dialogVisible = true;
-    //       this.index++;
-    //       this.isbegin = true;
-    //     } else {
-    //       console.log('error submit!!');
-    //       return false;
-    //     }
-    //   });
-    // },
     nextStep3 (formName) {
       const that = this;
       that.$refs[formName].validate(valid => {
@@ -329,7 +317,7 @@ export default {
             password: '' + that.ruleForm.password,
             userName: '' + that.ruleForm.userName,
             email: '' + that.ruleForm.email,
-            // desc: '' + that.ruleForm2.desc,
+            desc: '' + that.ruleForm2.desc,
             appId: '0c753fdd-5f54-4b24-bf50-491ea5eb1a84'
           })
             .then(res => {
@@ -369,8 +357,9 @@ export default {
             enterpriseName: '' + that.ruleForm2.enterpriseName,
             enterpriseScale: '' + that.ruleForm2.enterpriseScale,
             enterpriseNum: '' + that.ruleForm2.enterpriseNum,
-            // address: '' + that.ruleForm2.address,
+            address: '' + that.ruleForm2.address,
             detailAddress: '' + that.ruleForm2.detailAddress,
+            desc: '' + that.ruleForm2.desc,
             appId: '0c753fdd-5f54-4b24-bf50-491ea5eb1a84'
           })
             .then(res => {
@@ -446,7 +435,7 @@ export default {
 .regist-content {
   // 步骤条样式
   > :nth-child(1) {
-    width: 500px;
+    width: 660px;
     margin: 20px auto 0 auto;
   }
 }
