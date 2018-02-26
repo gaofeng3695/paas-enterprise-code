@@ -1,6 +1,6 @@
 <template>
   <div style="width:360px; margin:30px auto 10 auto">
-    <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="90px">
+    <!-- <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="90px">
       <el-form-item label="原密码" prop="password">
         <el-input v-model="ruleForm.password" placeholder="请输入原密码"></el-input>
       </el-form-item>
@@ -14,17 +14,17 @@
         <el-button type="primary" @click="cancel" style="width:125px; marginLeft:90px">保存</el-button>
         <el-button type="primary" @click="confirm" style="width:125px">取消</el-button>
       </div>
-    </el-form>
+    </el-form> -->
   </div>
 
 </template>
 
 <script>
-export default {
-  data () {
-
-  }
-};
+  export default {
+    data () {
+      return {};
+    }
+  };
 </script>
 
 <style lang="sass" scoped>

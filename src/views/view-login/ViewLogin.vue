@@ -13,8 +13,8 @@
           <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
         </div>
         <div class="tip maincolor clearfix">
-          <a href="#/view-reset" class="fl link">忘记密码</a>
-          <a href="#/view-regist" class="fr link">立即注册</a>
+          <el-button type="text" class="fl " @click="gotoreset">忘记密码</el-button>
+          <el-button type="text" class="fr " @click="gotoregist">立即注册</el-button>
         </div>
       </el-form>
       <div class="enterprise" v-else>
@@ -199,7 +199,15 @@
       changeEnterp (item) {
         this.enterpriseChoosed = this.enterprises[item];
         this.enterName = this.enterprises[item].enterpriseName;
+      },
+
+      gotoreset () {
+        this.$router.push('/view-reset');
+      },
+      gotoregist () {
+        this.$router.push('/view-regist');
       }
+
     }
   };
 </script>
