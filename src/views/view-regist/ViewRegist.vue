@@ -57,7 +57,7 @@
               <el-input v-model="ruleForm2.detailAddress" v-tip="{tip:'支持中文、字母、数字、“_”、“-”，2-200个字符'}" placeholder="请输入详细地址"></el-input>
             </el-form-item>
             <div>
-              <el-button type="text" @click="nextStep4" style="width:360px; paddingLeft:270px; font-size:10px">跳过此步骤</el-button>
+              <el-button type="text" @click="nextStep4('ruleForm2')" style="width:360px; paddingLeft:270px; font-size:10px">跳过此步骤</el-button>
               <el-button type="primary" @click="lastStep" style="width:125px; marginLeft:90px">上一步</el-button>
               <el-button type="primary" @click="nextStep3('ruleForm2')" style="width:125px">下一步</el-button>
             </div>
@@ -255,22 +255,21 @@ export default {
                 this.$jasStorage.set('userInfo', res.data.rows[0]);
                 that.registAndLogin2(formName);
               } else {
-                that.$notify({
-                  message: res.data.msg,
-                  type: 'error'
-                });
                 that.dialogVisible = true;
                 that.registAndLogin1(formName);
-                return false;
+                // that.$notify({
+                //   message: '注册失败，失败信息：' + res.data.msg,
+                //   type: 'error'
+                // });
               }
             })
             .catch(err => {
               that.$notify({
-                message: err,
+                message: '' + err,
                 type: 'error'
               });
               console.log('err', err);
-              return false;
+              // return false;
             });
         } else {
           console.log('error submit!');
@@ -304,10 +303,10 @@ export default {
                 this.$jasStorage.set('userInfo', res.data.rows[0]);
               } else {
                 that.$notify({
-                  message: res.data.msg,
+                  message: '注册失败，失败信息：' + res.data.msg,
                   type: 'error'
                 });
-                return false;
+                // return false;
               }
             })
             .catch(err => {
@@ -342,16 +341,17 @@ export default {
             appId: '0c753fdd-5f54-4b24-bf50-491ea5eb1a84'
           })
             .then(res => {
-              if (res.data.success === 1 && res.data.msg === 'ok') {
-                this.$jasStorage.set('userInfo', res.data.row[0]);
+              if (res.data.success === 1 && res.data.token) {
+                this.$jasStorage.set('userInfo', res.data.rows[0]);
                 that.index++;
                 that.isbegin = true;
-              } else {
+              } else if (res.data.success === -1 && res.data.msg === '已存在同名企业！') {
+                that.dialogVisible = true;
+                that.registAndLogin1(formName);
                 that.$notify({
-                  message: res.data.msg,
+                  message: '保存注册信息失败，错误信息：' + res.data.msg,
                   type: 'error'
                 });
-                return false;
               }
             })
             .catch(err => {
