@@ -56,6 +56,10 @@
       username () {
         let username = this.$jasStorage.get('userInfo').userName;
         return username || this.name;
+      },
+      photoUrl () {
+        // photoUrl: '/cloudlink-core-file/file/getImageBySize?fileId=' + res.rows[0].fileId + '&token=' + this.$jasStorage.get('token') + '&viewModel=fill&width=200&hight=200',
+        // let username = this.$jasStorage.get('userInfo').userName;
       }
     },
     methods: {
@@ -77,6 +81,7 @@
     line-height: 80px;
     color: #fff;
     margin: 0 -20px 0 -20px;
+    overflow: hidden;
   }
 
   .logo {

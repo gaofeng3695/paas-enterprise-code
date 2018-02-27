@@ -119,7 +119,7 @@ export default {
     };
     // 验证密码是否为空以及是否满足要求
     let validatePassword = (rule, value, callback) => {
-      if (value === '' || value.length < 6 || value.length > 20) {
+      if (value === '' || value.toString().length < 6 || value.toString().length > 20) {
         callback(new Error('请输入6-20位密码'));
       } else {
         if (this.ruleForm.checkPass !== '') {
@@ -139,18 +139,27 @@ export default {
       }
     };
     // 验证企业名称是否为空且是否满足要求
-    // let checkenterpriseName = (rule, value, callback) => {
-    //   var enterpriseNameReg = /^[^\d#\$\*\+@!%\^&-=][0-9a-zA-Z\u4e00-\u9fa5\(\)\（\）_-]{4,40}$/;
-    //   if (!value) {
-    //     callback(new Error('请输入企业名称'));
-    //   } else if (!enterpriseNameReg.test(value)) {
-    //     callback(new Error('请填写正确的企业名称'));
+    let checkenterpriseName = (rule, value, callback) => {
+      var enterpriseNameReg = /^[0-9a-zA-Z\u4e00-\u9fa5 ()（）_-]{4,40}$/;
+      if (!value) {
+        callback(new Error('请输入企业名称'));
+      } else if (!enterpriseNameReg.test(value)) {
+        callback(new Error('请填写工商局注册的全称'));
+      } else {
+        callback();
+      }
+    };
+    // 验证企业电话是否正确
+    // let checkenterpriseNum = (rule, value, callback) => {
+    //   var enterpriseNumReg = /^((0\d{2,3}-\d{7,8})|([1][3-8][0-9]{9}))$/;
+    //   if (!enterpriseNumReg.test(value)) {
+    //     callback(new Error('请输入正确的电话号码'));
     //   } else {
     //     callback();
     //   }
     // };
     return {
-      index: 1,             // 步骤条下标
+      index: 0,             // 步骤条下标
       isbegin: false,       // 注册成功页面倒计时，默认为false
       dialogVisible: false, // 申请加入企业页面，默认不显示
       ruleForm: {
@@ -175,41 +184,11 @@ export default {
         { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }]
       },
       rules2: {
-        // enterpriseName: [{ required: true, validator: checkenterpriseName, trigger: 'blur' }],
-        enterpriseName: [{ required: true, message: '请输入企业名称', trigger: 'blur' },
-        { min: 4, max: 40, message: '请填写工商局注册的全称', trigger: 'blur' }]
-      },
-      options: [{
-        value: 'beijing',
-        label: '北京',
-        children: [{
-          value: 'dongchengqu',
-          label: '东城区'
-        }, {
-          value: 'haidianqu',
-          label: '海淀区'
-        }, {
-          value: 'chaoyangqu',
-          label: '朝阳区'
-        }]
-      }, {
-        value: 'hebei',
-        label: '河北',
-        children: [{
-          value: 'shijiazhuang',
-          label: '石家庄'
-        }, {
-          value: 'tangshan',
-          label: '唐山',
-          children: [{
-            value: 'lunanqu',
-            label: '路南区'
-          }, {
-            value: 'lebeiqu',
-            label: '路北区'
-          }]
-        }]
-      }]
+        enterpriseName: [{ required: true, validator: checkenterpriseName, trigger: 'blur' }]
+        // enterpriseNum: [{ validator: checkenterpriseNum, trigger: 'blur,change' }]
+        // enterpriseName: [{ required: true, message: '请输入企业名称', trigger: 'blur' },
+        // { min: 4, max: 40, message: '请填写工商局注册的全称', trigger: 'blur' }]
+      }
     };
   },
 
@@ -287,7 +266,7 @@ export default {
             })
             .catch(err => {
               that.$notify({
-                message: 'aaa' + err,
+                message: err,
                 type: 'error'
               });
               console.log('err', err);
