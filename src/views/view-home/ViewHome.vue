@@ -1,7 +1,7 @@
 <template>
   <el-container style="height: 100%; border: 1px solid #eee">
 
-    <el-header height="70px" style="background-color: #242f42">
+    <el-header height="80px" style="background-color: #242f42">
       <ViewHomeHeader />
     </el-header>
 
@@ -9,10 +9,12 @@
       <el-aside width="200px" style="background-color: #324157">
         <ViewHomeSideBar />
       </el-aside>
-      <el-main>
-        <transition name="move" mode="out-in">
-          <router-view></router-view>
-        </transition>
+      <el-main style="background-color: #f3f4f8">
+        <div class="routerBg">
+          <transition name="move" mode="out-in">
+            <router-view></router-view>
+          </transition>
+        </div>
       </el-main>
     </el-container>
 
@@ -23,6 +25,12 @@
 
 
 <style>
+  .routerBg {
+    background: #fff;
+    min-height: 100%;
+    min-width: 900px;
+  }
+
   .el-header {
     background-color: #b3c0d1;
     color: #333;

@@ -2,7 +2,18 @@
 
 <template>
   <div class="header">
-    <div class="logo">中盈安信管理系统</div>
+    <div class="logo item">
+
+    </div>
+    <div class="name item">
+      <div class="china">云产品研发平台企业版</div>
+      <div class="english">ENTERPRISE EDITION</div>
+    </div>
+    <el-select v-model="value" placeholder="请选择" class="select01">
+      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+      </el-option>
+    </el-select>
+
     <div class="user-info">
       <el-dropdown trigger="click" @command="handleCommand">
         <span class="el-dropdown-link">
@@ -21,13 +32,34 @@
   export default {
     data () {
       return {
-        name: 'linxin'
+        name: 'linxin',
+        options: [{
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }, {
+          value: '选项4',
+          label: '龙须面'
+        }, {
+          value: '选项5',
+          label: '北京烤鸭'
+        }],
+        value: ''
       };
     },
     computed: {
       username () {
         let username = this.$jasStorage.get('userInfo').userName;
         return username || this.name;
+      },
+      photoUrl () {
+        // photoUrl: '/cloudlink-core-file/file/getImageBySize?fileId=' + res.rows[0].fileId + '&token=' + this.$jasStorage.get('token') + '&viewModel=fill&width=200&hight=200',
+        // let username = this.$jasStorage.get('userInfo').userName;
       }
     },
     methods: {
@@ -40,21 +72,45 @@
     }
   };
 </script>
-<style scoped>
+<style lang="scss"  scoped>
   .header {
     position: relative;
     box-sizing: border-box;
-    width: 100%;
-    height: 70px;
+    height: 80px;
     font-size: 22px;
-    line-height: 70px;
+    line-height: 80px;
     color: #fff;
+    margin: 0 -20px 0 -20px;
+    overflow: hidden;
   }
-  .header .logo {
+
+  .logo {
+    width: 80px;
+    background: url(/static/images/logo.png) no-repeat center right;
+    margin: 0 10px 0 0px;
+  }
+
+  .name {
+    .china {
+      height: 50px;
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 74px;
+    }
+    .english {
+      text-align: center;
+      line-height: 16px;
+      font-size: 8px;
+      letter-spacing: 6px;
+    }
+  }
+  .item {
+    height: 80px;
+    line-height: 80px;
+    color: white;
     float: left;
-    width: 250px;
-    text-align: center;
   }
+
   .user-info {
     float: right;
     padding-right: 50px;
@@ -79,5 +135,9 @@
   }
   .el-dropdown-menu__item {
     text-align: center;
+  }
+  .el-select {
+    margin-left: 20px;
+    line-height: 20px;
   }
 </style>

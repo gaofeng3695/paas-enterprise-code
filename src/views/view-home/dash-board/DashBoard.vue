@@ -32,7 +32,7 @@
     <JasSelectAddress v-model="aCity" />
     <div class="line">图片上传</div>
 
-    <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+    <el-upload class="avatar-uploader" :action="url" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
       <img v-if="imageUrl" :src="imageUrl" class="avatar">
       <i v-else class="el-icon-plus avatar-uploader-icon"></i>
     </el-upload>
@@ -51,6 +51,7 @@
   export default {
     data () {
       return {
+        url: '/cloudlink-core-file/attachment/save?token=' + this.$jasStorage.get('token') + '&bizType=pic&businessId=' + this.$jasStorage.get('userInfo').objectId,
         input5: '',
         success: false,
         active: 0,
@@ -67,6 +68,10 @@
         this.$message('这是一条消息提示');
       },
       handleAvatarSuccess (res, file) {
+        console.log(res, file);
+        // 使用网络的图片
+        // this.imageUrl = '/cloudlink-core-file/file/getImageBySize?fileId=' + res.rows[0].fileId + '&token=' + this.$jasStorage.get('token') + '&viewModel=fill&width=200&hight=200';
+        // 使用上传的真实图片
         this.imageUrl = URL.createObjectURL(file.raw);
       },
       beforeAvatarUpload (file) {
