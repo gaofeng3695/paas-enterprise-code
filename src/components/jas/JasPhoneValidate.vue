@@ -119,13 +119,12 @@
           var params = {
             sendMode: '1',                        // 验证类型必填： 1手机 2邮箱，默认为手机， 目前只支持手机
             sendNum: this.phoneForm.phone + '',   // 接收验证码账号，必选，字符串类型，手机号码或邮箱，目前只支持手机
-            signName: '巡线卫士',                  // 验证码签名即应用签名，必选，字符类型，如巡线卫士 2018-02-08:目前只有巡线卫士
+            signName: '中盈安信',                  // 验证码签名即应用签名，必选，字符类型，如巡线卫士、中盈安信
             useCategory: 'general'                // 使用场景，必选: 通用general 注册regist 登录 login
           };
           // 发送验证码API调用
           this.$jasHttp.post('/cloudlink-core-framework/verfy/getVerifyCode', params)
           .then(res => {
-            console.log('返回的信息：', res);
             // 成功发送验证码信息：{"success":1,"code":"200","msg":"ok","rows":[{"verifyCode":"验证码"}]}
             if (res.data.success === 1 && res.data.msg === 'ok') {
               this.$notify({
@@ -142,7 +141,7 @@
             } else {
               // 连开发人员都不知道的错误信息
               this.$notify({
-                message: '获取验证码出现未知错误，错误信息：' + res.data.msg,
+                message: '获取验证码出现错误，错误信息：' + res.data.msg,
                 type: 'error'
               });
             }
@@ -202,7 +201,6 @@
               });
             });
           } else {
-            console.log('error submit!!');
             return false;
           }
         });

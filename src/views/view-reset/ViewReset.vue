@@ -12,7 +12,7 @@
           <el-form :model="resetPdForm" :rules="rules" ref="resetPdForm" label-width="80px">
             <el-form-item label="新密码" prop="newPassword">
               <el-input v-model="resetPdForm.newPassword" type="password" placeholder="请输入新密码"
-              v-tip="{tip:'使用字母、数字和符号两种及以上的组合，6-20个字符'}">
+              v-tip="{tip:'建议使用字母、数字和符号两种及以上的组合，6-20个字符'}">
               </el-input>
               <!-- <p>使用字母、数字和符号两种及以上的组合，6-20个字符</p> -->
             </el-form-item>
@@ -47,23 +47,23 @@
       JasHeaderLogin, BaseSteps, JasPhoneValidate, JasRegistSuccess
     },
     data () {
-      // 新密码规则 验证： 使用字母、数字和符号两种及以上的组合，6-20个字符；
-      var checkedPasswordRule = (rule, value, callback) => {
-        // 正则规则： 字母+数字，字母+特殊字符，数字+特殊字符
-        const regular = /^(?![a-zA-z]+$)(?!\d+$)(?![!@#$%^&*]+$)[a-zA-Z\d!@#$%^&*]+$/;
-        if (!value) {
-          return callback(new Error('密码不能为空'));
-        } else if (value.toString().length < 6 || value.toString().length > 20) {
-          return callback(new Error('密码的长度为6到12位'));
-        } else {
-          // 校验密码规则 匹配
-          if (regular.test(value)) {
-            callback();
-          } else {
-            return callback(new Error('密码组合不对：使用字母、数字和符号两种及以上的组合'));
-          }
-        }
-      };
+      // // 新密码规则 验证： 使用字母、数字和符号两种及以上的组合，6-20个字符；
+      // var checkedPasswordRule = (rule, value, callback) => {
+      //   // 正则规则： 字母+数字，字母+特殊字符，数字+特殊字符
+      //   const regular = /^(?![a-zA-z]+$)(?!\d+$)(?![!@#$%^&*]+$)[a-zA-Z\d!@#$%^&*]+$/;
+      //   if (!value) {
+      //     return callback(new Error('密码不能为空'));
+      //   } else if (value.toString().length < 6 || value.toString().length > 20) {
+      //     return callback(new Error('密码的长度为6到12位'));
+      //   } else {
+      //     // 校验密码规则 匹配
+      //     if (regular.test(value)) {
+      //       callback();
+      //     } else {
+      //       return callback(new Error('密码组合不对：使用字母、数字和符号两种及以上的组合'));
+      //     }
+      //   }
+      // };
       // 确认密码 是否与新密码一致 验证
       var checkedConfirmPd = (rule, value, callback) => {
         if (!value) {
@@ -89,8 +89,9 @@
         rules: {
           newPassword: [
             {required: true, message: '请输入新密码'},
-            { min: 6, max: 20, message: '长度在6到20个字符' },
-            {validator: checkedPasswordRule}
+            { min: 6, max: 20, message: '长度在6到20个字符' }
+            // TODO: 密码复杂度验证以后再做
+            // {validator: checkedPasswordRule}
           ],
           confirmPassword: [
             {required: true, message: '请确认新密码'},
