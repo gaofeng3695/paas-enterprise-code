@@ -21,7 +21,6 @@ const tip = Vue.directive('tip', {
     html.style.top = '100%';
     html.style.left = '0';
     el.append(html);
-    console.log(el.append(html));
     input.addEventListener('focus', () => {
       html.style.visibility = 'visible';
       var errtip = el.parentElement.querySelector('.el-form-item__error');
