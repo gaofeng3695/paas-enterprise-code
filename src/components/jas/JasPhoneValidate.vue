@@ -131,25 +131,25 @@
                 message: '验证码已经发送，请注意接收短信！',
                 type: 'success'
               });
-              // this.$message.success('验证码已经发送，请注意接收短信！');
             } else if (res.data.success === -1) {
               // 获取验证码失败：{success:-1，msg："对应错误信息",code:"对应错误编码"}
               this.$notify({
-                message: '获取验证码出错，错误信息：' + res.data.msg,
+                message: '获取验证码出错，错误信息：' + res.data.msg || '服务器连接失败，请您稍后再试',
                 type: 'error'
               });
             } else {
               // 连开发人员都不知道的错误信息
               this.$notify({
-                message: '获取验证码出现错误，错误信息：' + res.data.msg,
+                message: '服务器连接失败，请您稍后再试',
                 type: 'error'
               });
             }
           }).catch(err => {
             this.$notify({
-              message: '发送验证码出错，请找管理员解决,错误信息：' + err,
+              message: '服务器连接失败，请您稍后再试',
               type: 'error'
             });
+            console.log('获取验证码出现异常：', err);
           });
         } else {
           // 手机号码格式不对，提示输入正确的手机号。
@@ -172,7 +172,7 @@
               sendNum: that.phoneForm.phone + '',           // 接收验证码的号码，手机号或邮箱，必选，字符串类型
               verifyCode: that.phoneForm.verifyCode + ''    // 验证码，必选，字符串类型】
             };
-            // TODO： 验证码正确性API 调用
+            // 校验验证码API 调用
             that.$jasHttp.get('/cloudlink-core-framework/verfy/checkVerifyCode', params)
             .then(res => {
               // 校验 验证码成功： {"success":1,"code":"200","msg":"ok","rows":[{}]}
@@ -182,23 +182,24 @@
               } else if (res.data.success === -1) {
                 // 校验 验证码失败：{success:-1，msg："对应错误信息",code:"对应错误编码"}
                 that.$notify({
-                  message: '验证码有误，错误信息：' + res.data.msg,
+                  message: '验证码有误，错误信息：' + res.data.msg || '服务器连接失败，请您稍后再试',
                   type: 'error'
                 });
                 return false;
               } else {
                 // 连开发人员都不知道的错误信息
                 that.$notify({
-                  message: '校验验证码出错，错误信息：' + res.data.msg,
+                  message: '服务器连接失败，请您稍后再试',
                   type: 'error'
                 });
                 return false;
               }
             }).catch(err => {
               that.$notify({
-                message: '校验验证码出错，请找管理员解决,错误信息：' + err,
+                message: '服务器连接失败，请您稍后再试',
                 type: 'error'
               });
+              console.log('校验验证码出现异常：', err);
             });
           } else {
             return false;
