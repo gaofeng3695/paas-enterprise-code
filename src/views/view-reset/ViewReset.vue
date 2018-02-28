@@ -167,14 +167,14 @@
             // 密码重置失败：{success:-1，msg："对应错误信息",code:"对应错误编码"}
             this.$notify({
               duration: 9000,
-              message: '密码重置出错，错误信息：' + res.data.msg,
+              message: '密码重置出错，错误信息：' + res.data.msg || '服务器连接失败，请您稍后再试',
               type: 'error'
             });
           } else {
             // 连开发人员都不知道的错误信息
             this.$notify({
               duration: 9000,
-              message: '密码重置出现未知错误，错误信息：' + res.data.msg,
+              message: '服务器连接失败，请您稍后再试',
               type: 'error'
             });
           }
@@ -182,9 +182,10 @@
         }).catch(err => {
           this.$notify({
             duration: 9000,
-            message: '密码重置出错，请找管理员解决，错误信息：' + err,
+            message: '服务器连接失败，请您稍后再试',
             type: 'error'
           });
+          console.log('密码重置出现异常：', err);
           this.resetPdSwitcher = true;    // 可以再次请求重置密码API
         });
       }
