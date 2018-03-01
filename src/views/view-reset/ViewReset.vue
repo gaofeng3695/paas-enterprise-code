@@ -12,7 +12,7 @@
           <el-form :model="resetPdForm" :rules="rules" ref="resetPdForm" label-width="80px">
             <el-form-item label="新密码" prop="newPassword">
               <el-input v-model="resetPdForm.newPassword" type="password" placeholder="请输入新密码"
-              v-tip="{tip:'建议使用字母、数字和符号两种及以上的组合，6-20个字符'}">
+              v-tip="{tip:'支持数字、字母，6-12个字符'}">
               </el-input>
               <!-- <p>使用字母、数字和符号两种及以上的组合，6-20个字符</p> -->
             </el-form-item>
@@ -64,6 +64,32 @@
       //     }
       //   }
       // };
+      /**
+       * 验证： 密码输入的只能是数字和字母
+       * @param {Object}rule        表单验证规则
+       * @param {Object}value       输入的值
+       * @param {Object}callback    回调函数
+       * @returns {Object}callback  回调函数
+      */
+      var checkedInputType = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('密码不能为空'));
+        } else {
+          // 如果密码长度 是6~12位才验证输入类型
+          if (value.toString().length >= 6 && value.toString().length <= 12) {
+            // 密码输入仅支持数字、字母，禁止输入其他符号
+            const regular = /^[0-9a-zA-Z]+$/;
+            if (regular.test(value)) {
+              callback();
+            } else {
+              return callback(new Error('仅支持数字、字母，禁止输入其他符号'));
+            }
+          } else {
+            if (value.toString().length < 6) return callback(new Error('密码太短，密码长度最少6位'));
+            if (value.toString().length > 12) return callback(new Error('密码太长，密码长度最多12位'));
+          }
+        }
+      };
       // 确认密码 是否与新密码一致 验证
       var checkedConfirmPd = (rule, value, callback) => {
         if (!value) {
@@ -89,14 +115,15 @@
         rules: {
           newPassword: [
             {required: true, message: '请输入新密码'},
-            { min: 6, max: 20, message: '长度在6到20个字符' }
+            { min: 6, max: 12, message: '长度在6到12个字符' },
+            {validator: checkedInputType}  // 验证： 只能输入数字和字母
             // TODO: 密码复杂度验证以后再做
             // {validator: checkedPasswordRule}
           ],
           confirmPassword: [
             {required: true, message: '请确认新密码'},
-            { min: 6, max: 20, message: '长度在6到20个字符' },
-            {validator: checkedConfirmPd}
+            { min: 6, max: 12, message: '长度在6到12个字符' },
+            {validator: checkedConfirmPd}   // 确认密码 是否与新密码一致
           ]
         },
         resetPdSwitcher: true,  // 密码重置API 防止重复发送开关： 一次请求结果返回才可以再次请求， true：可以发送， false：禁止发送
@@ -124,6 +151,10 @@
         this.$refs[formName].validate(valid => {
           if (valid) {
             if (that.resetPdForm.newPassword === that.resetPdForm.confirmPassword) {
+              if (!that.phoneInfo || !that.phoneInfo.phone) {
+                this.$notify({ message: '手机号不存在！！！！！', type: 'error' });
+                return false;   // 验证没有通过
+              }
               var params = {
                 mobileNum: that.phoneInfo.phone + '',         // 手机号 字符串类型
                 verifyCode: that.phoneInfo.verifyCode + '',   // 验证码 字符串类型
@@ -131,13 +162,11 @@
               };
               this.resetPassword(params);                     // 调用接口重置密码
             } else {
-              this.$notify({
-                message: '两次密码不一致，请重新输入！！！！！',
-                type: 'error'
-              });
+              this.$notify({ message: '两次密码不一致，请重新输入！！！！！', type: 'error' });
+              return false;   // 验证没有通过
             }
           } else {
-            return false;
+            return false;// 验证没有通过
           }
         });
       },
