@@ -1,7 +1,7 @@
 <template>
   <div class="view-reset">
     <JasHeaderLogin :type="2" />
-    <div>
+    <JasWrapperLogin >
       <div class="content">
         <!-- 密码找回步骤条 -->
         <BaseSteps :active="step" :steps="['安全验证','重置密码','完成']" />
@@ -30,10 +30,8 @@
         <div  v-show="step === 2" class="view-reset-success">
           <JasRegistSuccess :begin="step === 2" title="恭喜您，密码重置成功！"/>
         </div>
-        
       </div>
-      <p class="copyright">版权所有：北京中盈安信技术服务股份有限公司 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;京ICP备12006059号-1</p>
-    </div>
+    </JasWrapperLogin>
   </div>
 </template>
 
@@ -41,10 +39,11 @@
   import JasHeaderLogin from '../../components/jas/JasHeaderLogin.vue';     // 头部组件
   import BaseSteps from '../../components/base/BaseSteps.vue';              // 步骤条组件
   import JasPhoneValidate from '../../components/jas/JasPhoneValidate.vue'; // 电话号码验证
-  import JasRegistSuccess from '../../components/jas/JasRegistSuccess.vue'; // 电话号码验证
+  import JasRegistSuccess from '../../components/jas/JasRegistSuccess.vue'; // 密码重置成功提示组件
+  import JasWrapperLogin from '../../components/jas/JasWrapperLogin.vue';   // 密码找回框
   export default {
     components: {
-      JasHeaderLogin, BaseSteps, JasPhoneValidate, JasRegistSuccess
+      JasHeaderLogin, BaseSteps, JasPhoneValidate, JasRegistSuccess, JasWrapperLogin
     },
     data () {
       // // 新密码规则 验证： 使用字母、数字和符号两种及以上的组合，6-20个字符；
@@ -223,8 +222,6 @@
 </script>
 
 <style lang="scss" scoped>
-
-   
   // 找回密码页面总样式
   .view-reset {
     height: 100%;
@@ -247,40 +244,31 @@
       width: 100%;
       background-color: #f4f7f8;
     }
-    // 密码找回输入信息部分样式
+    
+    // 密码找回部分样式
     .content {
-      margin: 100px auto auto auto;
-      height: 450px;
-      width: 700px;
-      background-color: #fff;
-      border: 1px solid #f4f7f8;    // 防止外边距合并 颜色与父元素背景色一直 隐藏
+      overflow: scroll;
+      padding-top: 10px;
     }
-    // 版权信息
-    .copyright {
-      margin: 20px auto auto auto;
-      width: 500px;
-    }
-  } 
+  }
 
   .view-reset .content {
     // 步骤条样式
     > :nth-child(1) {
       width: 500px;
-      margin: 50px auto 0 auto;
+      margin: 0 auto;
+      // margin: 50px auto 0 auto;
     }
-    // 手机号验证表单组件、输入新密码 样式
+    // 手机号验证样式
     > :nth-child(2) {
-      width: 500px;
-      margin: 50px auto 0 auto;
+      width: 410px;
+      margin: 35px auto 0 auto;
+      // margin: 50px auto 0 auto;
     }
     // 密码重置成功提示样式
     .view-reset-success {
-      width: 310px;
-      margin:50px auto;
+      margin-top: 110px;
     }
-  }
-  
-  
+  } 
 
-  
 </style>
