@@ -70,7 +70,7 @@
       handleAvatarSuccess (res, file) {
         console.log(res, file);
         // 使用网络的图片
-        // this.imageUrl = '/cloudlink-core-file/file/getImageBySize?fileId=' + res.rows[0].fileId + '&token=' + this.$jasStorage.get('token') + '&viewModel=fill&width=200&hight=200';
+        this.imageUrl = '/cloudlink-core-file/file/getImageBySize?fileId=' + res.rows[0].fileId + '&token=' + this.$jasStorage.get('token') + '&viewModel=fill&width=200&hight=200';
         // 使用上传的真实图片
         this.imageUrl = URL.createObjectURL(file.raw);
       },
