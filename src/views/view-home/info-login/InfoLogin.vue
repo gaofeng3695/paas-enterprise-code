@@ -1,14 +1,32 @@
 <template>
-  <div>
-    登录信息
+  <div class="wrapper">
+    <JasWrapperLogin>
+      <div>这里写表单等内容</div>
+      <el-input></el-input>
+      <el-input></el-input>
+      <el-input></el-input>
+      <el-input></el-input>
+      <el-input></el-input>
+      <el-input></el-input>
+      <el-input></el-input>
+      <el-input></el-input>
+      <el-input></el-input>
+    </JasWrapperLogin>
   </div>
 
 </template>
 
 <script>
-  export default {};
+  import JasWrapperLogin from '../../../components/jas/JasWrapperLogin.vue';
+  export default {
+    components: {
+      JasWrapperLogin
+    }
+  };
 </script>
 
-<style lang="sass" scoped>
-
+<style lang="scss" scoped>
+  .wrapper {
+    background: #f90;
+  }
 </style>

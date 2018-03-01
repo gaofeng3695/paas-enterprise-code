@@ -114,7 +114,7 @@
             } else {
               this.loginSwitcher = true;
               this.$notify({
-                message: res.data.msg || '网络故障请，您稍后再试',
+                message: res.data.msg || '服务器连接失败，请您稍后再试',
                 type: 'error'
               });
             }
@@ -123,7 +123,7 @@
             this.loginSwitcher = true;
 
             this.$notify({
-              message: '网络故障请，您稍后再试',
+              message: '服务器连接失败，请您稍后再试',
               type: 'error'
             });
             console.log('err', err);
@@ -139,7 +139,7 @@
               this.enterprises = res.data.rows;
             } else {
               this.$notify({
-                message: res.data.msg || '网络故障请，您稍后再试',
+                message: res.data.msg || '服务器连接失败，请您稍后再试',
                 type: 'error'
               });
             }
@@ -147,7 +147,7 @@
           .catch(err => {
             this.loginSwitcher = true;
             this.$notify({
-              message: '网络故障请，您稍后再试',
+              message: '服务器连接失败，请您稍后再试',
               type: 'error'
             });
             console.log('err', err);
@@ -168,7 +168,7 @@
               this._goToHomePage();
             } else {
               this.$notify({
-                message: res.data.msg || '网络故障请，您稍后再试',
+                message: res.data.msg || '服务器连接失败，请您稍后再试',
                 type: 'error'
               });
             }
@@ -176,7 +176,7 @@
           .catch(err => {
             this.loginSwitcher2 = true;
             this.$notify({
-              message: '网络故障请，您稍后再试',
+              message: '服务器连接失败，请您稍后再试',
               type: 'error'
             });
             console.log('err', err);
@@ -264,7 +264,7 @@
     top: 50%;
     width: 320px;
     height: 320px;
-    margin: -260px 0 0 -230px;
+    margin: -260px 0 0 -200px;
     padding: 40px;
     border-radius: 12px;
     background: #fff;
