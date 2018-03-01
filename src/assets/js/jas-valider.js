@@ -29,14 +29,14 @@ export default {
   },
   wechat: {
     desc: '微信',
-    regexp: /\S{1,50}/,
+    regexp: /^\S{1,50}$/,
     tip: '1-50个字符',
     warning: '格式不正确',
     requirement: '【必填项】不能为空'
   },
   qq: {
     desc: 'qq',
-    regexp: /[1-9]([0-9]{5,11}$)/,
+    regexp: /^\d{5,11}$/,
     tip: '支持5-11位qq号码',
     warning: '格式不正确',
     requirement: '【必填项】不能为空'
@@ -50,14 +50,14 @@ export default {
   },
   register: {
     desc: '社会统一信用代码或注册号',
-    regexp: null,
+    regexp: /^[A-Z0-9]{15,18}$/,
     tip: '请输入18位的统一社会信用代码或15位工商注册号',
     warning: '格式不正确',
     requirement: '【必填项】不能为空'
   },
   phone: {
     desc: '电话',
-    regexp: /[0-9-()（）]{7,18}/,
+    regexp: /^[0-9-()（）]{7,18}$/,
     tip: '请输入正确的电话号码，例如010-62660379',
     warning: '格式不正确',
     requirement: '【必填项】不能为空'
@@ -92,7 +92,7 @@ export default {
   },
   text: {
     desc: '申请理由/审核意见/备注',
-    regexp: /\S{0,200}/,
+    regexp: /^\S{0,200}$/,
     tip: '最多200个字符',
     warning: '格式不正确',
     requirement: '【必填项】不能为空'
