@@ -16,7 +16,7 @@
               </el-input>
             </el-form-item>
             <el-form-item label="确认密码" prop="confirmPassword">
-              <el-input v-model="resetPdForm.confirmPassword" type="password" placeholder="请确认密码">
+              <el-input v-model="resetPdForm.confirmPassword" type="password" placeholder="请确认密码" v-tip="{tip:promptInfo.password.tip}">
               </el-input>
             </el-form-item>
             <!-- 下一步 提交按钮 -->
@@ -80,6 +80,10 @@
             const regular = /^[0-9a-zA-Z]+$/;
             if (regular.test(value)) {
               callback();
+              // 两次密码输入一直验证
+              if (this.resetPdForm.confirmPassword && this.resetPdForm.confirmPassword.toString().length >= 6) {
+                this.$refs.resetPdForm.validateField('confirmPassword');
+              }
             } else {
               return callback(new Error(jasValider.password.warning));  // '格式不正确'
             }
@@ -241,7 +245,7 @@
     // 正文样式
     > :nth-child(2) {
       box-sizing: border-box;
-      overflow: scroll;
+      overflow: hidden;
       border-top: 80px solid;
       height: 100%;
       width: 100%;
@@ -250,7 +254,7 @@
 
     // 密码找回部分样式
     .content {
-      overflow: scroll;
+      overflow: hidden;
       padding-top: 10px;
     }
   }
@@ -270,6 +274,7 @@
     }
     // 密码重置成功提示样式
     .view-reset-success {
+      width: auto;
       margin-top: 110px;
     }
   }

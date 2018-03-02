@@ -3,7 +3,7 @@
     <el-form :model="phoneForm" :rules="rules" ref="phoneForm" label-width="80px">
       <!-- 手机号 -->
       <el-form-item label="手机号" prop="phone">
-        <el-input v-model.number="phoneForm.phone" placeholder="手机号">
+        <el-input v-model.number="phoneForm.phone" placeholder="手机号" v-tip="{tip:promptInfo.tel.tip}">
           <!-- slot="prepend" 在输入框中的前面 -->
           <el-select v-model="phoneForm.countryCode" slot="prepend" placeholder="请选择">
             <el-option label="+86" value="+86"></el-option>
@@ -16,14 +16,14 @@
       </el-form-item>
       <!-- 获取手机验证码 -->
       <el-form-item label="验证码" prop="verifyCode">
-        <el-input v-model="phoneForm.verifyCode" placeholder="请输入手机验证码">
+        <el-input v-model="phoneForm.verifyCode" placeholder="请输入手机验证码" v-tip="{tip:'请输入验证码'}">
           <!-- slot="append" 在输入框的后面 -->
           <BaseButtonTimer slot="append" name="发送验证码" :time="countdown" @callback="sendPhoneCode" />
         </el-input>
       </el-form-item>
       <!-- 同意用户协议选择框 -->
       <el-form-item prop="accept">
-        <el-checkbox v-model="phoneForm.accept">阅读并接受
+        <el-checkbox v-model="phoneForm.accept" @change="checkedAcceptValue()">阅读并接受
           <a href="#">《用户协议》</a>
         </el-checkbox>
       </el-form-item>
@@ -104,16 +104,37 @@
           verifyCode: [{ required: true, message: '请输入验证码。' }],
           accept: [{ validator: checkedAccept, required: true, trigger: 'change' }]
         },
+        promptInfo: jasValider, // 表单提示信息
         // 获取验证码按钮的倒计时 时间
         countdown: 0
       };
     },
     computed: {
-      asd () {
-        return this.phoneForm.accept;
+      /**
+       * 手动滑块 滑动后触发验证事件
+       * @returns {void} phoneForm.manualVerify
+      */
+      touchManualVerify () {
+        return this.phoneForm.manualVerify;
+      }
+    },
+    watch: {
+      /**
+       * 手动滑块 滑动后触发验证事件
+       * @returns {void}
+      */
+      touchManualVerify: function () {
+        this.$refs.phoneForm.validateField('manualVerify');
       }
     },
     methods: {
+      /**
+       * 勾选统一按钮后 触发统一按钮验证
+       * @returns {void}
+      */
+      checkedAcceptValue () {
+        this.$refs.phoneForm.validateField('accept');
+      },
       /**
        * 发送验证码按钮 处理事件
        * @returns {void}
