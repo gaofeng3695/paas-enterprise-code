@@ -1,7 +1,7 @@
 <template>
   <div class="view-reset">
     <JasHeaderLogin :type="2" />
-    <JasWrapperLogin >
+    <JasWrapperLogin>
       <div class="content">
         <!-- 密码找回步骤条 -->
         <BaseSteps :active="step" :steps="['安全验证','重置密码','完成']" />
@@ -11,12 +11,12 @@
         <div v-if="step === 1">
           <el-form :model="resetPdForm" :rules="rules" ref="resetPdForm" label-width="80px">
             <el-form-item label="新密码" prop="newPassword">
-              <el-input v-model="resetPdForm.newPassword" type="password" placeholder="请输入新密码"
-               v-tip="{tip:promptInfo.password.tip}"> <!--提示信息：'支持数字、字母，6-12个字符' -->
+              <el-input v-model="resetPdForm.newPassword" type="password" placeholder="请输入新密码" v-tip="{tip:promptInfo.password.tip}">
+                <!--提示信息：'支持数字、字母，6-12个字符' -->
               </el-input>
             </el-form-item>
             <el-form-item label="确认密码" prop="confirmPassword">
-              <el-input v-model="resetPdForm.confirmPassword"  type="password" placeholder="请确认密码" v-tip="{tip:promptInfo.password.tip}">
+              <el-input v-model="resetPdForm.confirmPassword" type="password" placeholder="请确认密码" v-tip="{tip:promptInfo.password.tip}">
               </el-input>
             </el-form-item>
             <!-- 下一步 提交按钮 -->
@@ -26,8 +26,8 @@
           </el-form>
         </div>
         <!-- 第三步： 提示密码找回成功 -->
-        <div  v-show="step === 2" class="view-reset-success">
-          <JasRegistSuccess :begin="step === 2" title="恭喜您，密码重置成功！"/>
+        <div v-show="step === 2" class="view-reset-success">
+          <JasRegistSuccess :begin="step === 2" title="恭喜您，密码重置成功！" />
         </div>
       </div>
     </JasWrapperLogin>
@@ -119,16 +119,16 @@
         // 密码重置表单验证规则
         rules: {
           newPassword: [
-            {required: true, message: jasValider.password.requirement},   // 【必填项】不能为空
+            { required: true, message: jasValider.password.requirement },   // 【必填项】不能为空
             { min: 6, max: 12, message: '长度在6到12个字符' },
-            {validator: checkedInputType}  // 验证： 只能输入数字和字母
+            { validator: checkedInputType }  // 验证： 只能输入数字和字母
             // TODO: 密码复杂度验证以后再做
             // {validator: checkedPasswordRule}
           ],
           confirmPassword: [
-            {required: true, message: jasValider.password.requirement},   // 【必填项】不能为空
+            { required: true, message: jasValider.password.requirement },   // 【必填项】不能为空
             { min: 6, max: 12, message: '长度在6到12个字符' },
-            {validator: checkedConfirmPd}   // 确认密码 是否与新密码一致
+            { validator: checkedConfirmPd }   // 确认密码 是否与新密码一致
           ]
         },
         resetPdSwitcher: true,  // 密码重置API 防止重复发送开关： 一次请求结果返回才可以再次请求， true：可以发送， false：禁止发送
@@ -193,36 +193,36 @@
         }
         this.resetPdSwitcher = false;   // 禁止请求重置密码API
         this.$jasHttp.post('/cloudlink-core-framework/login/resetPassword', params)
-        .then(res => {
-          // 密码重置成功：{"success":1,"code":"200","msg":"ok","rows":[{"booleanResult":true}]}
-          if (res.data.success === 1 && res.data.msg === 'ok') {
-            // 密码确认成功，进入第三步，提示密码修改成功
-            this.step = 2;
-          } else if (res.data.success === -1) {
-            // 密码重置失败：{success:-1，msg："对应错误信息",code:"对应错误编码"}
-            this.$notify({
-              duration: 9000,
-              message: '密码重置出错，错误信息：' + res.data.msg || '服务器连接失败，请您稍后再试',
-              type: 'error'
-            });
-          } else {
-            // 连开发人员都不知道的错误信息
+          .then(res => {
+            // 密码重置成功：{"success":1,"code":"200","msg":"ok","rows":[{"booleanResult":true}]}
+            if (res.data.success === 1 && res.data.msg === 'ok') {
+              // 密码确认成功，进入第三步，提示密码修改成功
+              this.step = 2;
+            } else if (res.data.success === -1) {
+              // 密码重置失败：{success:-1，msg："对应错误信息",code:"对应错误编码"}
+              this.$notify({
+                duration: 9000,
+                message: '密码重置出错，错误信息：' + res.data.msg || '服务器连接失败，请您稍后再试',
+                type: 'error'
+              });
+            } else {
+              // 连开发人员都不知道的错误信息
+              this.$notify({
+                duration: 9000,
+                message: '服务器连接失败，请您稍后再试',
+                type: 'error'
+              });
+            }
+            this.resetPdSwitcher = true;    // 可以再次请求重置密码API
+          }).catch(err => {
             this.$notify({
               duration: 9000,
               message: '服务器连接失败，请您稍后再试',
               type: 'error'
             });
-          }
-          this.resetPdSwitcher = true;    // 可以再次请求重置密码API
-        }).catch(err => {
-          this.$notify({
-            duration: 9000,
-            message: '服务器连接失败，请您稍后再试',
-            type: 'error'
+            console.log('密码重置出现异常：', err);
+            this.resetPdSwitcher = true;    // 可以再次请求重置密码API
           });
-          console.log('密码重置出现异常：', err);
-          this.resetPdSwitcher = true;    // 可以再次请求重置密码API
-        });
       }
     }
   };
@@ -244,17 +244,17 @@
     }
     // 正文样式
     > :nth-child(2) {
-      box-sizing: border-box; 
-      overflow: scroll;
+      box-sizing: border-box;
+      overflow: hidden;
       border-top: 80px solid;
       height: 100%;
       width: 100%;
       background-color: #f4f7f8;
     }
-    
+
     // 密码找回部分样式
     .content {
-      overflow: scroll;
+      overflow: hidden;
       padding-top: 10px;
     }
   }
@@ -277,6 +277,5 @@
       width: auto;
       margin-top: 110px;
     }
-  } 
-
+  }
 </style>

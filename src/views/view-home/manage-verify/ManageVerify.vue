@@ -1,6 +1,6 @@
 <template>
   <div>
-    操作信息
+    用户审核
   </div>
 
 </template>

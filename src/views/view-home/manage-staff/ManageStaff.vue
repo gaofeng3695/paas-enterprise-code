@@ -1,6 +1,6 @@
 <template>
   <div>
-    操作信息
+    部门、用户管理
   </div>
 
 </template>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form :model="phoneForm" :rules="rules" ref="phoneForm" label-width="80px"> 
+    <el-form :model="phoneForm" :rules="rules" ref="phoneForm" label-width="80px">
       <!-- 手机号 -->
       <el-form-item label="手机号" prop="phone">
         <el-input v-model.number="phoneForm.phone" placeholder="手机号" v-tip="{tip:promptInfo.tel.tip}">
@@ -23,7 +23,9 @@
       </el-form-item>
       <!-- 同意用户协议选择框 -->
       <el-form-item prop="accept">
-        <el-checkbox v-model="phoneForm.accept" @change="checkedAcceptValue()" >阅读并接受 <a href="#">《用户协议》</a></el-checkbox>
+        <el-checkbox v-model="phoneForm.accept" @change="checkedAcceptValue()">阅读并接受
+          <a href="#">《用户协议》</a>
+        </el-checkbox>
       </el-form-item>
       <!-- 下一步 提交按钮 -->
       <el-form-item>
@@ -96,7 +98,7 @@
         // 手机表单验证规则
         rules: {
           phone: [{ type: 'number', required: true, message: jasValider.tel.requirement },  // '【必填项】不能为空'
-                {validator: checkedPhoneNumber}
+          { validator: checkedPhoneNumber }
           ],
           manualVerify: [{ validator: checkedManual, required: true, trigger: 'change' }],
           verifyCode: [{ required: true, message: '请输入验证码。' }],
@@ -150,33 +152,33 @@
           };
           // 发送验证码API调用
           this.$jasHttp.post('/cloudlink-core-framework/verfy/getVerifyCode', params)
-          .then(res => {
-            // 成功发送验证码信息：{"success":1,"code":"200","msg":"ok","rows":[{"verifyCode":"验证码"}]}
-            if (res.data.success === 1 && res.data.msg === 'ok') {
-              this.$notify({
-                message: '验证码已经发送，请注意接收短信！',
-                type: 'success'
-              });
-            } else if (res.data.success === -1) {
-              // 获取验证码失败：{success:-1，msg："对应错误信息",code:"对应错误编码"}
-              this.$notify({
-                message: '获取验证码出错，错误信息：' + res.data.msg || '服务器连接失败，请您稍后再试',
-                type: 'error'
-              });
-            } else {
-              // 连开发人员都不知道的错误信息
+            .then(res => {
+              // 成功发送验证码信息：{"success":1,"code":"200","msg":"ok","rows":[{"verifyCode":"验证码"}]}
+              if (res.data.success === 1 && res.data.msg === 'ok') {
+                this.$notify({
+                  message: '验证码已经发送，请注意接收短信！',
+                  type: 'success'
+                });
+              } else if (res.data.success === -1) {
+                // 获取验证码失败：{success:-1，msg："对应错误信息",code:"对应错误编码"}
+                this.$notify({
+                  message: '获取验证码出错，错误信息：' + res.data.msg || '服务器连接失败，请您稍后再试',
+                  type: 'error'
+                });
+              } else {
+                // 连开发人员都不知道的错误信息
+                this.$notify({
+                  message: '服务器连接失败，请您稍后再试',
+                  type: 'error'
+                });
+              }
+            }).catch(err => {
               this.$notify({
                 message: '服务器连接失败，请您稍后再试',
                 type: 'error'
               });
-            }
-          }).catch(err => {
-            this.$notify({
-              message: '服务器连接失败，请您稍后再试',
-              type: 'error'
+              console.log('获取验证码出现异常：', err);
             });
-            console.log('获取验证码出现异常：', err);
-          });
         } else {
           // 手机号码格式不对，提示输入正确的手机号。
           this.$notify({
@@ -200,33 +202,33 @@
             };
             // 校验验证码API 调用
             that.$jasHttp.get('/cloudlink-core-framework/verfy/checkVerifyCode', params)
-            .then(res => {
-              // 校验 验证码成功： {"success":1,"code":"200","msg":"ok","rows":[{}]}
-              if (res.data.success === 1 && res.data.msg === 'ok') {
-                // that.$message.success('验证码没问题');
-                that.$emit('getPhone', that.phoneForm);
-              } else if (res.data.success === -1) {
-                // 校验 验证码失败：{success:-1，msg："对应错误信息",code:"对应错误编码"}
-                that.$notify({
-                  message: '验证码有误，错误信息：' + res.data.msg || '服务器连接失败，请您稍后再试',
-                  type: 'error'
-                });
-                return false;
-              } else {
-                // 连开发人员都不知道的错误信息
+              .then(res => {
+                // 校验 验证码成功： {"success":1,"code":"200","msg":"ok","rows":[{}]}
+                if (res.data.success === 1 && res.data.msg === 'ok') {
+                  // that.$message.success('验证码没问题');
+                  that.$emit('getPhone', that.phoneForm);
+                } else if (res.data.success === -1) {
+                  // 校验 验证码失败：{success:-1，msg："对应错误信息",code:"对应错误编码"}
+                  that.$notify({
+                    message: '验证码有误，错误信息：' + res.data.msg || '服务器连接失败，请您稍后再试',
+                    type: 'error'
+                  });
+                  return false;
+                } else {
+                  // 连开发人员都不知道的错误信息
+                  that.$notify({
+                    message: '服务器连接失败，请您稍后再试',
+                    type: 'error'
+                  });
+                  return false;
+                }
+              }).catch(err => {
                 that.$notify({
                   message: '服务器连接失败，请您稍后再试',
                   type: 'error'
                 });
-                return false;
-              }
-            }).catch(err => {
-              that.$notify({
-                message: '服务器连接失败，请您稍后再试',
-                type: 'error'
+                console.log('校验验证码出现异常：', err);
               });
-              console.log('校验验证码出现异常：', err);
-            });
           } else {
             return false;
           }

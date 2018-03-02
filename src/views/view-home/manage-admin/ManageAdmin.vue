@@ -1,6 +1,6 @@
 <template>
   <div>
-    操作信息
+    更换管理员
   </div>
 
 </template>
