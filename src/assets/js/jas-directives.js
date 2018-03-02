@@ -2,7 +2,6 @@ import Vue from 'vue';
 
 const tip = Vue.directive('tip', {
   bind: function (el, binding) {
-    console.log(binding);
     let input = el.querySelector('input');
     let obj = binding.value;
     let tip = obj.tip;
