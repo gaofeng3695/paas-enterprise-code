@@ -27,37 +27,72 @@ const router = new Router({
       children: [{
         path: '',
         redirect: 'dash-board'
-      }, {
+      },
+      {
         path: 'dash-board',
         component: resolve => require(['../views/view-home/dash-board/DashBoard.vue'], resolve)
-      }, {
-        path: 'demo-table',
-        component: resolve => require(['../views/view-home/demo-table/DemoTable.vue'], resolve)
-      }, {
+      },
+      {
+        path: 'demo-component',
+        component: resolve => require(['../views/view-home/demo-component/DemoComponent.vue'], resolve)
+      },
+      {
+        path: 'application-manage',
+        component: resolve => require(['../views/view-home/application-manage/ApplicationManage.vue'], resolve)
+      },
+      {
+        path: 'product-service',
+        component: resolve => require(['../views/view-home/product-service/ProductService.vue'], resolve)
+      },
+      {
+        path: 'manage-admin',
+        component: resolve => require(['../views/view-home/manage-admin/ManageAdmin.vue'], resolve)
+      },
+      {
+        path: 'manage-configure',
+        component: resolve => require(['../views/view-home/manage-configure/ManageConfigure.vue'], resolve)
+      },
+      {
+        path: 'manage-staff',
+        component: resolve => require(['../views/view-home/manage-staff/ManageStaff.vue'], resolve)
+      },
+      {
+        path: 'manage-verify',
+        component: resolve => require(['../views/view-home/manage-verify/ManageVerify.vue'], resolve)
+      },
+      {
         path: 'info-login',
         component: resolve => require(['../views/view-home/info-login/InfoLogin.vue'], resolve)
-      }, {
+      },
+      {
         path: 'info-operate',
         component: resolve => require(['../views/view-home/info-operate/InfoOperate.vue'], resolve)
-      }, {
+      },
+      {
         path: 'info-statistic',
         component: resolve => require(['../views/view-home/info-statistic/InfoStatistic.vue'], resolve)
-      }, {
+      },
+      {
         path: 'user-info',
         component: resolve => require(['../views/view-home/user-info/UserInfo.vue'], resolve)
-      }, {
+      },
+      {
         path: 'user-password',
         component: resolve => require(['../views/view-home/user-password/UserPassword.vue'], resolve)
-      }, {
+      },
+      {
         path: 'user-login',
         component: resolve => require(['../views/view-home/user-login/UserLogin.vue'], resolve)
-      }, {
+      },
+      {
         path: 'user-enterprise',
         component: resolve => require(['../views/view-home/user-enterprise/UserEnterprise.vue'], resolve)
-      }, {
+      },
+      {
         path: 'user-app',
         component: resolve => require(['../views/view-home/user-app/UserApp.vue'], resolve)
-      }]
+      }
+      ]
     },
     { // 错误路径重定向到登录页面
       path: '*',

@@ -1,6 +1,6 @@
 <template>
   <div>
-    操作信息
+    企业设置
   </div>
 
 </template>

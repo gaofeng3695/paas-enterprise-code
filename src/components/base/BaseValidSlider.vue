@@ -107,8 +107,9 @@
   .movebox {
     position: relative;
     background-color: #e8e8e8;
-    height: 34px;
-    line-height: 34px;
+    margin-top: 1px;
+    height: 38px;
+    line-height: 38px;
     text-align: center;
     .txt {
       width: 100%;
@@ -123,15 +124,15 @@
     }
     .movego {
       background-color: #7ac23c;
-      height: 34px;
+      height: 38px;
       width: 0px;
     }
     .move {
       position: absolute;
-      top: 0px;
+      top: -1px;
       left: 0px;
-      width: 40px;
-      height: 34px;
+      width: 38px;
+      height: 38px;
       border: 1px solid #ccc;
       cursor: move;
     }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    操作信息
+    企业应用
   </div>
 
 </template>
