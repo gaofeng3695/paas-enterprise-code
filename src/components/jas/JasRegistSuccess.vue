@@ -1,16 +1,18 @@
 <template>
-  <div>
-    <div class="titletop">
-      <i class="el-icon-success icon"></i>
-      <span class="titlename">{{title}}</span>
-    </div>
-    <div class="middle padleft">
-      <span> >> </span>
-      <span class="count">{{count}}</span>
-      <span>{{subtip}}</span>
-    </div>
-    <div class="bottom padleft">
-      <span @click="gotonext">立即登录</span>
+  <div class="outwrapper">
+    <div class="wrapper01">
+      <div class="titletop">
+        <i class="el-icon-success icon"></i>
+        <span class="titlename">{{title}}</span>
+      </div>
+      <div class="middle padleft">
+        <span> >> </span>
+        <span class="count">{{count}}</span>
+        <span>{{subtip}}</span>
+      </div>
+      <div class="bottom padleft">
+        <span @click="gotonext">立即登录</span>
+      </div>
     </div>
   </div>
 
@@ -78,6 +80,17 @@
 </script>
 
 <style lang="scss" scoped>
+  .outwrapper {
+    position: relative;
+    min-height: 130px;
+  }
+  .wrapper01 {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+  }
+
   .padleft {
     padding-left: 60px;
   }

@@ -13,6 +13,13 @@ export default {
     warning: '格式不正确',
     requirement: '【必填项】不能为空'
   },
+  password2: {
+    desc: '确认密码',
+    regexp: null,
+    tip: '请再次输入密码',
+    warning: '两次输入密码不一致',
+    requirement: '【必填项】不能为空'
+  },
   name: {
     desc: '姓名',
     regexp: /^[a-zA-Z\u4e00-\u9fa5]{1,20}$/,
