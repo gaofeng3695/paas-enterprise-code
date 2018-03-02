@@ -4,10 +4,10 @@
       <div class="ms-title maincolor">云产品研发平台企业版</div>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" v-if="!logined" class="form">
         <el-form-item prop="username">
-          <el-input prefix-icon="fa fa-user" v-model.number="ruleForm.username" placeholder="请输入手机号"></el-input>
+          <el-input prefix-icon="fa fa-user" v-model.number="ruleForm.username" v-tip="{tip:'请输入手机号'}" placeholder="请输入手机号"></el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input prefix-icon="fa fa-lock" type="password" placeholder="请输入密码" v-model="ruleForm.password" @keyup.enter.native="login('ruleForm')"></el-input>
+          <el-input prefix-icon="fa fa-lock" type="password" v-tip="{tip:'请输入密码'}" placeholder="请输入密码" v-model="ruleForm.password" @keyup.enter.native="login('ruleForm')"></el-input>
         </el-form-item>
         <div class="login-btn">
           <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
@@ -43,24 +43,18 @@
 </template>
 
 <script>
+  import JasValider from '../../assets/js/jas-valider';
   export default {
     data: () => {
       // 手机号正确性检测
       var checkedPhoneNumber = (rule, value, callback, that) => {
-        var numberReg = /^[1][3-8][0-9]{9}$/; // 手机号匹配规则： 1. 第一位为1。   2. 第二位为3~8中的一个。   3. 最后9位为0~9中的一个。
-        this.countdown = 0;                   // 重置发送验证码 按钮倒计时为0(禁止倒计时)
+        var numberReg = JasValider.tel.regexp; // 手机号匹配规则： 1. 第一位为1。   2. 第二位为3~8中的一个。   3. 最后9位为0~9中的一个。
         if (!value) {
-          return callback(new Error('手机号不能为空'));
-        } else if (value.toString().length !== 11) {
-          return callback(new Error('手机号长度不对(长度11位)'));
+          return callback(new Error('请输入手机号'));
+        } else if (numberReg.test(value)) {
+          callback();
         } else {
-          // 手机号格式正确，设置 发送验证码按钮倒计时为60秒
-          if (numberReg.test(value)) {
-            this.countdown = 20;
-            callback();
-          } else {
-            return callback(new Error('手机号格式不对'));
-          }
+          return callback(new Error(JasValider.tel.warning));
         }
       };
       return {
@@ -69,8 +63,8 @@
         enterName: '',
         enterprises: [],
         ruleForm: {
-          username: 18000000001,
-          password: '111111'
+          username: null,
+          password: null
         },
         rules: {
           username: [{ type: 'number', required: true, message: '请输入手机号' },
