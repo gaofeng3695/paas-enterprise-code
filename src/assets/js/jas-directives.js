@@ -2,7 +2,8 @@ import Vue from 'vue';
 
 const tip = Vue.directive('tip', {
   bind: function (el, binding) {
-    let input = el.querySelector('input');
+    let inputs = el.querySelectorAll('input');
+    let input = inputs.length > 1 ? inputs[1] : inputs[0];
     let obj = binding.value;
     let tip = obj.tip;
     if (!input || !tip) return;
