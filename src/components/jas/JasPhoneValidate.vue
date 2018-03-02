@@ -18,7 +18,6 @@
       <el-form-item label="验证码" prop="verifyCode">
         <el-input v-model="phoneForm.verifyCode" placeholder="请输入手机验证码">
           <!-- slot="append" 在输入框的后面 -->
-          <!-- <el-button slot="append">获取验证码</el-button> -->
           <BaseButtonTimer slot="append" name="发送验证码" :time="countdown" @callback="sendPhoneCode" />
         </el-input>
       </el-form-item>
@@ -45,6 +44,7 @@
    */
   import BaseValidSlider from '../base/BaseValidSlider.vue';
   import BaseButtonTimer from '../base/BaseButtonTimer.vue';
+  import jasValider from '../../assets/js/jas-valider';         // 表单输入项、验证的提示信息
   export default {
     components: {
       BaseValidSlider, BaseButtonTimer
@@ -68,19 +68,19 @@
       };
       // 手机号正确性检测
       var checkedPhoneNumber = (rule, value, callback, that) => {
-        var numberReg = /^[1][3-8][0-9]{9}$/; // 手机号匹配规则： 1. 第一位为1。   2. 第二位为3~8中的一个。   3. 最后9位为0~9中的一个。
+        var numberReg = jasValider.tel.regexp; // 手机号匹配规则
         this.countdown = 0;                   // 重置发送验证码 按钮倒计时为0(禁止倒计时)
         if (!value) {
-          return callback(new Error('手机号不能为空'));
+          return callback(new Error(jasValider.tel.requirement));   // 手机号不能为空
         } else if (value.toString().length !== 11) {
-          return callback(new Error('手机号长度不对(长度11位)'));
+          return callback(new Error(jasValider.tel.warning));       // 格式不正确
         } else {
           // 手机号格式正确，设置 发送验证码按钮倒计时为60秒
           if (numberReg.test(value)) {
             this.countdown = 60;
             callback();
           } else {
-            return callback(new Error('手机号格式不对'));
+            return callback(new Error(jasValider.tel.warning)); // 格式不正确
           }
         }
       };
@@ -95,7 +95,7 @@
         },
         // 手机表单验证规则
         rules: {
-          phone: [{ type: 'number', required: true, message: '请输入手机号。' },
+          phone: [{ type: 'number', required: true, message: jasValider.tel.requirement },  // '【必填项】不能为空'
                 {validator: checkedPhoneNumber}
           ],
           manualVerify: [{ validator: checkedManual, required: true, trigger: 'change' }],

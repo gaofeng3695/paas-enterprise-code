@@ -12,9 +12,8 @@
           <el-form :model="resetPdForm" :rules="rules" ref="resetPdForm" label-width="80px">
             <el-form-item label="新密码" prop="newPassword">
               <el-input v-model="resetPdForm.newPassword" type="password" placeholder="请输入新密码"
-              v-tip="{tip:'支持数字、字母，6-12个字符'}">
+               v-tip="{tip:promptInfo.password.tip}"> <!--提示信息：'支持数字、字母，6-12个字符' -->
               </el-input>
-              <!-- <p>使用字母、数字和符号两种及以上的组合，6-20个字符</p> -->
             </el-form-item>
             <el-form-item label="确认密码" prop="confirmPassword">
               <el-input v-model="resetPdForm.confirmPassword"  type="password" placeholder="请确认密码">
@@ -41,6 +40,7 @@
   import JasPhoneValidate from '../../components/jas/JasPhoneValidate.vue'; // 电话号码验证
   import JasRegistSuccess from '../../components/jas/JasRegistSuccess.vue'; // 密码重置成功提示组件
   import JasWrapperLogin from '../../components/jas/JasWrapperLogin.vue';   // 密码找回框
+  import jasValider from '../../assets/js/jas-valider';
   export default {
     components: {
       JasHeaderLogin, BaseSteps, JasPhoneValidate, JasRegistSuccess, JasWrapperLogin
@@ -72,7 +72,7 @@
       */
       var checkedInputType = (rule, value, callback) => {
         if (!value) {
-          return callback(new Error('密码不能为空'));
+          return callback(new Error(jasValider.password.requirement));  // 密码不能为空
         } else {
           // 如果密码长度 是6~12位才验证输入类型
           if (value.toString().length >= 6 && value.toString().length <= 12) {
@@ -81,11 +81,12 @@
             if (regular.test(value)) {
               callback();
             } else {
-              return callback(new Error('仅支持数字、字母，禁止输入其他符号'));
+              return callback(new Error(jasValider.password.warning));  // '格式不正确'
             }
           } else {
-            if (value.toString().length < 6) return callback(new Error('密码太短，密码长度最少6位'));
-            if (value.toString().length > 12) return callback(new Error('密码太长，密码长度最多12位'));
+            // if (value.toString().length < 6) return callback(new Error('密码太短，密码长度最少6位'));
+            // if (value.toString().length > 12) return callback(new Error('密码太长，密码长度最多12位'));
+            return callback(new Error(jasValider.password.warning));  // '格式不正确'
           }
         }
       };
@@ -102,6 +103,7 @@
           }
         } else {
           // 这里是超出密码规定长度了，已经在 rules里面限制了。
+          return callback(new Error(jasValider.password.warning));  // '格式不正确'
         }
       };
       return {
@@ -113,20 +115,21 @@
         // 密码重置表单验证规则
         rules: {
           newPassword: [
-            {required: true, message: '请输入新密码'},
+            {required: true, message: jasValider.password.requirement},   // 【必填项】不能为空
             { min: 6, max: 12, message: '长度在6到12个字符' },
             {validator: checkedInputType}  // 验证： 只能输入数字和字母
             // TODO: 密码复杂度验证以后再做
             // {validator: checkedPasswordRule}
           ],
           confirmPassword: [
-            {required: true, message: '请确认新密码'},
+            {required: true, message: jasValider.password.requirement},   // 【必填项】不能为空
             { min: 6, max: 12, message: '长度在6到12个字符' },
             {validator: checkedConfirmPd}   // 确认密码 是否与新密码一致
           ]
         },
         resetPdSwitcher: true,  // 密码重置API 防止重复发送开关： 一次请求结果返回才可以再次请求， true：可以发送， false：禁止发送
         phoneInfo: null,        // 获得的 手机号与验证码信息
+        promptInfo: jasValider, // 表单提示信息
         step: 0                 // 步骤条
       };
     },
