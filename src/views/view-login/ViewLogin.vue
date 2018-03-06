@@ -211,7 +211,7 @@
     position: relative;
     width: 100%;
     height: 100%;
-    background: #f90 url(/static/images/loginbg.png) no-repeat center center;
+    background: url(/static/images/loginbg.png) no-repeat center center;
     background-size: cover;
   }
 

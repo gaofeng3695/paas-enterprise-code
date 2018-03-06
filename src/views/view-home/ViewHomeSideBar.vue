@@ -31,6 +31,51 @@
           },
           {
             icon: 'el-icon-menu',
+            index: 'product',
+            title: '产品服务',
+            subs: [
+              {
+                index: '/view-home/product-service',
+                title: '巡线卫士'
+              }
+            ]
+          },
+          {
+            icon: 'el-icon-menu',
+            index: 'application',
+            title: '企业应用',
+            subs: [
+              {
+                index: '/view-home/application-manage',
+                title: '巡线卫士'
+              }
+            ]
+          },
+          {
+            icon: 'el-icon-menu',
+            index: 'manage',
+            title: '企业管理',
+            subs: [
+              {
+                index: '/view-home/manage-staff',
+                title: '部门/用户管理'
+              },
+              {
+                index: '/view-home/manage-verify',
+                title: '用户审核'
+              },
+              {
+                index: '/view-home/manage-configure',
+                title: '企业设置'
+              },
+              {
+                index: '/view-home/manage-admin',
+                title: '更换企业管理员'
+              }
+            ]
+          },
+          {
+            icon: 'el-icon-menu',
             index: 'info',
             title: '企业数据',
             subs: [
@@ -82,8 +127,8 @@
             title: '举例',
             subs: [
               {
-                index: '/view-home/demo-table',
-                title: '列表模板'
+                index: '/view-home/demo-component',
+                title: '组件示例'
               }
             ]
           }
