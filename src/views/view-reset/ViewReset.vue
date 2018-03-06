@@ -244,8 +244,8 @@
     }
     // 正文样式
     > :nth-child(2) {
-      box-sizing: border-box;
-      overflow: hidden;
+      box-sizing: border-box; 
+      overflow: auto;
       border-top: 80px solid;
       height: 100%;
       width: 100%;
@@ -254,7 +254,6 @@
 
     // 密码找回部分样式
     .content {
-      overflow: hidden;
       padding-top: 10px;
     }
   }
