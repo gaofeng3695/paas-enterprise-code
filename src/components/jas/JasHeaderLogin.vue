@@ -18,7 +18,7 @@
         <span class="link" @click="gotologin">登录</span>
       </span>
       <span v-else>
-        <span>已有账号？</span>
+        <span class="grey01">已有账号？</span>
         <span class="link" @click="gotologin">马上登录</span>
       </span>
     </div>
@@ -59,11 +59,14 @@
   .header {
     overflow: hidden;
     height: 80px;
-    background: #3699dc;
+    background: #282d40;
     .logo {
       width: 80px;
       background: url(/static/images/logo.png) no-repeat center right;
       margin: 0 10px 0 0px;
+    }
+    .grey01 {
+      color: #a4a5a9;
     }
     .title {
       padding-left: 22px;
@@ -89,6 +92,9 @@
       padding-right: 22px;
       span.link {
         cursor: pointer;
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
   }

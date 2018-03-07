@@ -4,7 +4,7 @@
   <div>
     <div class="movebox">
       <div class="movego" :style="[greenStyle,transitionStyle]"></div>
-      <div class="txt" id="txt">{{tip}}</div>
+      <div class="txt" :class="{colorWhite:success}" id="txt">{{tip}}</div>
       <div class="move" :class="className" :style="[moveStyle,transitionStyle]" @mousedown="beginMove" @mouseout="doMove"></div>
     </div>
   </div>
@@ -112,6 +112,7 @@
     line-height: 38px;
     text-align: center;
     .txt {
+      color: #666;
       width: 100%;
       text-align: center;
       position: absolute;
@@ -121,6 +122,9 @@
       user-select: none;
       -o-user-select: none;
       -ms-user-select: none;
+    }
+    .colorWhite {
+      color: white;
     }
     .movego {
       background-color: #7ac23c;

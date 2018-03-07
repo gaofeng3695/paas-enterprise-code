@@ -4,10 +4,10 @@
       <div class="ms-title maincolor">云产品研发平台企业版</div>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" v-if="!logined" class="form">
         <el-form-item prop="username">
-          <el-input prefix-icon="fa fa-user" v-model.number="ruleForm.username" v-tip="{tip:'请输入手机号'}" placeholder="请输入手机号"></el-input>
+          <el-input prefix-icon="fa fa-user" clearable v-model.number="ruleForm.username" v-tip="{tip:'请输入手机号'}" placeholder="请输入手机号"></el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input prefix-icon="fa fa-lock" type="password" v-tip="{tip:'请输入密码'}" placeholder="请输入密码" v-model="ruleForm.password" @keyup.enter.native="login('ruleForm')"></el-input>
+          <el-input prefix-icon="fa fa-lock" clearable type="password" v-tip="{tip:'请输入密码'}" placeholder="请输入密码" v-model="ruleForm.password" @keyup.enter.native="login('ruleForm')"></el-input>
         </el-form-item>
         <div class="login-btn">
           <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
@@ -20,6 +20,7 @@
       <div class="enterprise" v-else>
         <p class="tip01">您的账号属于多个企业，请选择您要登录的公司</p>
         <div class="cardwrap">
+          <div class="mask"></div>
           <el-carousel :autoplay="false" type="card" trigger="click" indicator-position="none" height="110px" class="enters" @change="changeEnterp">
             <el-carousel-item v-for="item in enterprises" :key="item.objectId" class="logowrap">
               <img width="60" height="60" :src="item.url || '/static/images/enterlogo.png'" />
@@ -63,8 +64,8 @@
         enterName: '',
         enterprises: [],
         ruleForm: {
-          username: null,
-          password: null
+          username: 18000000000,
+          password: 111111
         },
         rules: {
           username: [{ type: 'number', required: true, message: '请输入手机号' },
@@ -87,7 +88,7 @@
           .post('/cloudlink-core-framework/login/login', {
             loginNum: '' + this.ruleForm.username,
             password: this.ruleForm.password + '',
-            appId: '0c753fdd-5f54-4b24-bf50-491ea5eb1a84'
+            appId: '871e16bc-6e21-47fc-b358-47b9494179ff'
           })
           .then(res => {
             if (res.data.success === 1) {
@@ -153,7 +154,7 @@
         this.$jasHttp
           .post('/cloudlink-core-framework/login/loginWithEnterprise', {
             enterpriseId: this.enterpriseChoosed.objectId,
-            appId: '0c753fdd-5f54-4b24-bf50-491ea5eb1a84'
+            appId: '871e16bc-6e21-47fc-b358-47b9494179ff'
           }, true)
           .then(res => {
             this.loginSwitcher2 = true;
@@ -214,13 +215,23 @@
     background: url(/static/images/loginbg.png) no-repeat center center;
     background-size: cover;
   }
-
+  .mask {
+    position: absolute;
+    z-index: 99;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70%;
+    background: #999;
+    opacity: 0.4;
+  }
   .enterprise {
     .tip01 {
       text-align: center;
       padding: 10px 0;
     }
     .cardwrap {
+      position: relative;
       box-sizing: border-box;
       height: 205px;
       padding: 10px 0 20px 0;
