@@ -28,6 +28,7 @@
     background-color: #fbe6e6;
     border-radius: 5px;
     line-height: 15px;
+    min-height: 20px;
     position: relative;
   }
   // 字体图标样式
