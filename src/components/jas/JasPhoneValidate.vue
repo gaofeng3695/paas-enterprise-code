@@ -1,6 +1,10 @@
 <template>
   <div>
     <el-form :model="phoneForm" :rules="rules" ref="phoneForm" label-width="80px">
+      <!-- API返回错误信息显示 -->
+      <el-form-item v-show="showErrorInfo">
+        <BaseErrorTip :errorInfo="APIErrorInfo" />
+      </el-form-item>
       <!-- 手机号 -->
       <el-form-item label="手机号" prop="phone">
         <el-input v-model.number="phoneForm.phone" placeholder="手机号" v-tip="{tip:promptInfo.tel.tip}">
@@ -44,12 +48,13 @@
    * @event getPhone 点击下一步按钮的回调
    * @returns {Object}phoneForm 手机表单数据：详情见下面 data
    */
-  import BaseValidSlider from '../base/BaseValidSlider.vue';
-  import BaseButtonTimer from '../base/BaseButtonTimer.vue';
+  import BaseValidSlider from '../base/BaseValidSlider.vue';    // 手动滑块
+  import BaseButtonTimer from '../base/BaseButtonTimer.vue';    // 倒计时按钮
   import jasValider from '../../assets/js/jas-valider';         // 表单输入项、验证的提示信息
+  import BaseErrorTip from '../base/BaseErrorTip.vue';          // 错误信息显示组件
   export default {
     components: {
-      BaseValidSlider, BaseButtonTimer
+      BaseValidSlider, BaseButtonTimer, BaseErrorTip
     },
     data () {
       // 手动拖动滑块 校验
@@ -87,6 +92,8 @@
         }
       };
       return {
+        APIErrorInfo: '',           // API返回的错误信息
+        showErrorInfo: false,       // 是否显示错误信息组件
         // 手机表单数据
         phoneForm: {
           countryCode: '+86',       // 手机号 国家码
@@ -155,36 +162,28 @@
             .then(res => {
               // 成功发送验证码信息：{"success":1,"code":"200","msg":"ok","rows":[{"verifyCode":"验证码"}]}
               if (res.data.success === 1 && res.data.msg === 'ok') {
-                this.$notify({
-                  message: '验证码已经发送，请注意接收短信！',
-                  type: 'success'
-                });
+                this.showErrorInfo = false;    // 关闭错误信息显示组件
+                this.$notify({ message: '验证码已经发送，请注意接收短信！', type: 'success' });
               } else if (res.data.success === -1) {
                 // 获取验证码失败：{success:-1，msg："对应错误信息",code:"对应错误编码"}
-                this.$notify({
-                  message: '获取验证码出错，错误信息：' + res.data.msg || '服务器连接失败，请您稍后再试',
-                  type: 'error'
-                });
+                this.APIErrorInfo = '获取验证码出错，错误信息：' + res.data.msg || '服务器连接失败，请您稍后再试';
+                this.showErrorInfo = true;    // 显示API报错信息
+                // this.$notify({ message: '获取验证码出错，错误信息：' + res.data.msg || '服务器连接失败，请您稍后再试', type: 'error' });
               } else {
                 // 连开发人员都不知道的错误信息
-                this.$notify({
-                  message: '服务器连接失败，请您稍后再试',
-                  type: 'error'
-                });
+                this.APIErrorInfo = '服务器连接失败，请您稍后再试';
+                this.showErrorInfo = true;    // 显示API报错信息
               }
             }).catch(err => {
-              this.$notify({
-                message: '服务器连接失败，请您稍后再试',
-                type: 'error'
-              });
+              this.APIErrorInfo = '服务器连接失败，请您稍后再试';
+              this.showErrorInfo = true;    // 显示API报错信息
               console.log('获取验证码出现异常：', err);
             });
         } else {
           // 手机号码格式不对，提示输入正确的手机号。
-          this.$notify({
-            message: '请输入正确的手机号码，然后在点击发送验证码！',
-            type: 'error'
-          });
+          this.APIErrorInfo = '请输入正确的手机号码，然后在点击发送验证码！';
+          this.showErrorInfo = true;
+          // this.$notify({ message: '请输入正确的手机号码，然后在点击发送验证码！', type: 'error' });
         }
       },
       /**
@@ -206,27 +205,23 @@
                 // 校验 验证码成功： {"success":1,"code":"200","msg":"ok","rows":[{}]}
                 if (res.data.success === 1 && res.data.msg === 'ok') {
                   // that.$message.success('验证码没问题');
+                  this.showErrorInfo = false;    // 关闭错误信息显示组件
                   that.$emit('getPhone', that.phoneForm);
                 } else if (res.data.success === -1) {
                   // 校验 验证码失败：{success:-1，msg："对应错误信息",code:"对应错误编码"}
-                  that.$notify({
-                    message: '验证码有误，错误信息：' + res.data.msg || '服务器连接失败，请您稍后再试',
-                    type: 'error'
-                  });
+                  this.APIErrorInfo = '验证码不对：' + res.data.msg || '服务器连接失败，请您稍后再试';
+                  this.showErrorInfo = true;    // 显示API报错信息
+                  // that.$notify({ message: '验证码有误，错误信息：' + res.data.msg || '服务器连接失败，请您稍后再试', type: 'error' });
                   return false;
                 } else {
                   // 连开发人员都不知道的错误信息
-                  that.$notify({
-                    message: '服务器连接失败，请您稍后再试',
-                    type: 'error'
-                  });
+                  this.APIErrorInfo = '服务器连接失败，请您稍后再试';
+                  this.showErrorInfo = true;    // 显示API报错信息
                   return false;
                 }
               }).catch(err => {
-                that.$notify({
-                  message: '服务器连接失败，请您稍后再试',
-                  type: 'error'
-                });
+                this.APIErrorInfo = '服务器连接失败，请您稍后再试';
+                this.showErrorInfo = true;    // 显示API报错信息
                 console.log('校验验证码出现异常：', err);
               });
           } else {
